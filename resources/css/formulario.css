@@ -1,0 +1,23 @@
+.titulo {
+    text-align: center;
+    padding: 10px;
+    margin-bottom: 10px;
+    font-weight: 700;
+    font-size: 14px;
+    color: #555;
+    border-bottom: 1px solid #CCC;
+    text-transform: uppercase;
+}
+.subtitulo{
+    text-align: center;
+    padding: 5px;
+    margin-bottom: 5px;
+    color: #555;
+    font-size: 12px;
+    font-weight: 400;
+}
+
+input[disabled]{
+    background-color: #eee;
+    opacity: 1;
+}

@@ -1,0 +1,37 @@
+[
+    {
+        "name"     : "jose", 
+        "email"    : "jose@jose.com", 
+        "password" : "jose"
+    },
+    {
+        "name"     : "luis", 
+        "email"    : "luis@luis.com", 
+        "password" : "luis"
+    },
+    {
+        "name"     : "marta", 
+        "email"    : "marta@marta.com", 
+        "password" : "marta"
+    },
+    {
+        "name"     : "rosa", 
+        "email"    : "rosa@rosa.com", 
+        "password" : "rosa"
+    },
+    {
+        "name"     : "carmen", 
+        "email"    : "carmen@carmen.com", 
+        "password" : "carmen"
+    },
+    {
+        "name"     : "rene", 
+        "email"    : "rene@rene.com", 
+        "password" : "rene"
+    },
+    {
+        "name"     : "fulano", 
+        "email"    : "fulano@fulano.com", 
+        "password" : "fulano"
+    }
+]

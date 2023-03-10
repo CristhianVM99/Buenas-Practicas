@@ -1,0 +1,1 @@
+$(".marco").click(function(){$(this).toggleClass("active")});$("input:checked + .marco").addClass("active");function a(c){let t=[];return c.each(function(s,i){t.push($(i).data("id"))}),t}export{a as l};

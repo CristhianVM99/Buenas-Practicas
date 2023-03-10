@@ -1,0 +1,1 @@
+.marco{position:relative;padding:8px;background-color:#fff;box-shadow:2px 2px 5px #00000080}.marco:before{content:"";position:absolute;bottom:0;right:0;width:20px;height:20px;background-color:wheat}.marco.active:after{content:"\2714";position:absolute;bottom:-8px;right:-8px;color:green;font-size:30px;font-weight:700;text-shadow:3px 3px 4px rgba(100,100,100,.8)}

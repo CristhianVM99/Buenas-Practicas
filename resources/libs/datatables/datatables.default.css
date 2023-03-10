@@ -1,0 +1,15 @@
+select{
+    background-image: none;
+    appearance: auto;
+}
+
+button.dt-button, 
+button.dt-button:hover:not(.disabled), 
+button.dt-button:active:not(.disabled), 
+button.dt-button:focus:not(.disabled), 
+button.dt-button:active:not(.disabled):hover:not(.disabled){
+    background: none;
+    border: none;
+    padding: 0;
+    box-shadow: none;
+}

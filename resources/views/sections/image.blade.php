@@ -1,0 +1,1 @@
+<img class="object-contain" style="height:50px" src="{{$url}}" alt="No Imagen"/>

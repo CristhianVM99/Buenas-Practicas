@@ -1,0 +1,10 @@
+.boton{
+    padding: 10px 15px;
+    border-radius: 3px;
+    opacity: 0.9;
+    cursor: pointer;
+    position: relative;
+}
+.boton.active{
+    box-shadow: inset 0 -4px 0 rgba(0,0,0,0.2);
+}

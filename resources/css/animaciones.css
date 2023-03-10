@@ -1,0 +1,10 @@
+.colapse {
+    overflow: hidden; /* oculta el contenido que sobresale */
+    max-height: 0; /* establece la altura inicial en 0 */
+    transition: max-height 0.5s linear; /* anima la transición de altura */
+  }
+  
+  /* para mostrar el contenido, se establece la altura en "auto" */
+  .colapse.show {
+    max-height: 1000px;
+  }

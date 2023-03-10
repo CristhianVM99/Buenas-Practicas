@@ -1,0 +1,180 @@
+{
+  "resources/js/app.js": {
+    "file": "assets/app.f4fa460d.js",
+    "src": "resources/js/app.js",
+    "isEntry": true,
+    "imports": [
+      "_toast.04e64154.js"
+    ],
+    "css": [
+      "assets/app.8b59ee1c.css"
+    ]
+  },
+  "resources/js/user-app.js": {
+    "file": "assets/user-app.f314409f.js",
+    "src": "resources/js/user-app.js",
+    "isEntry": true,
+    "imports": [
+      "_datatables.default.6403d28a.js",
+      "_toast.04e64154.js"
+    ],
+    "css": [
+      "assets/cards.e65770e0.css",
+      "assets/formulario.f91cf85a.css"
+    ]
+  },
+  "resources/js/registro-app.js": {
+    "file": "assets/registro-app.f2df4bde.js",
+    "src": "resources/js/registro-app.js",
+    "isEntry": true,
+    "imports": [
+      "_validates.dd8a5988.js",
+      "_toast.04e64154.js",
+      "_ods.480fe64b.js"
+    ],
+    "css": [
+      "assets/registro-app.e01d3f27.css",
+      "assets/cards.e65770e0.css",
+      "assets/formulario.f91cf85a.css"
+    ]
+  },
+  "resources/js/post-app.js": {
+    "file": "assets/post-app.5a70cfa9.js",
+    "src": "resources/js/post-app.js",
+    "isEntry": true,
+    "css": [
+      "assets/post-app.f4148672.css",
+      "assets/formulario.f91cf85a.css"
+    ]
+  },
+  "resources/js/entidad-table.js": {
+    "file": "assets/entidad-table.71bd6409.js",
+    "src": "resources/js/entidad-table.js",
+    "isEntry": true,
+    "imports": [
+      "_datatables.default.6403d28a.js",
+      "_toast.04e64154.js"
+    ]
+  },
+  "resources/js/entidad-app.js": {
+    "file": "assets/entidad-app.eabca5ae.js",
+    "src": "resources/js/entidad-app.js",
+    "isEntry": true,
+    "css": [
+      "assets/cards.e65770e0.css"
+    ]
+  },
+  "resources/js/videos-table.js": {
+    "file": "assets/videos-table.ed0c56a9.js",
+    "src": "resources/js/videos-table.js",
+    "isEntry": true,
+    "imports": [
+      "_datatables.default.6403d28a.js",
+      "_toast.04e64154.js"
+    ]
+  },
+  "resources/js/video-app.js": {
+    "file": "assets/video-app.1459a47a.js",
+    "src": "resources/js/video-app.js",
+    "isEntry": true,
+    "imports": [
+      "_validates.dd8a5988.js",
+      "_ods.480fe64b.js",
+      "_toast.04e64154.js"
+    ],
+    "css": [
+      "assets/cards.e65770e0.css",
+      "assets/formulario.f91cf85a.css"
+    ]
+  },
+  "resources/js/admin-user-form.js": {
+    "file": "assets/admin-user-form.dfff7d72.js",
+    "src": "resources/js/admin-user-form.js",
+    "isEntry": true,
+    "imports": [
+      "_validates.dd8a5988.js",
+      "_toast.04e64154.js"
+    ],
+    "css": [
+      "assets/admin-user-form.396bf20c.css",
+      "assets/cards.e65770e0.css"
+    ]
+  },
+  "resources/js/admin-user-table.js": {
+    "file": "assets/admin-user-table.353fb149.js",
+    "src": "resources/js/admin-user-table.js",
+    "isEntry": true,
+    "imports": [
+      "_datatables.default.6403d28a.js",
+      "_toast.04e64154.js"
+    ]
+  },
+  "_toast.04e64154.js": {
+    "file": "assets/toast.04e64154.js"
+  },
+  "_datatables.default.6403d28a.js": {
+    "file": "assets/datatables.default.6403d28a.js",
+    "imports": [
+      "_toast.04e64154.js"
+    ],
+    "css": [
+      "assets/datatables.f01b8d85.css"
+    ]
+  },
+  "_ods.480fe64b.js": {
+    "file": "assets/ods.480fe64b.js",
+    "css": [
+      "assets/ods.1abf2702.css"
+    ]
+  },
+  "_validates.dd8a5988.js": {
+    "file": "assets/validates.dd8a5988.js",
+    "imports": [
+      "_toast.04e64154.js"
+    ],
+    "css": [
+      "assets/validates.a912a8b1.css"
+    ]
+  },
+  "datatables.css": {
+    "file": "assets/datatables.f01b8d85.css",
+    "src": "datatables.css"
+  },
+  "ods.css": {
+    "file": "assets/ods.1abf2702.css",
+    "src": "ods.css"
+  },
+  "resources/js/app.css": {
+    "file": "assets/app.8b59ee1c.css",
+    "src": "resources/js/app.css"
+  },
+  "validates.css": {
+    "file": "assets/validates.a912a8b1.css",
+    "src": "validates.css"
+  },
+  "resources/js/admin-user-form.css": {
+    "file": "assets/admin-user-form.396bf20c.css",
+    "src": "resources/js/admin-user-form.css"
+  },
+  "resources/js/post-app.css": {
+    "file": "assets/post-app.f4148672.css",
+    "src": "resources/js/post-app.css"
+  },
+  "cards.css": {
+    "file": "assets/cards.e65770e0.css",
+    "src": "cards.css"
+  },
+  "resources/js/registro-app.css": {
+    "file": "assets/registro-app.e01d3f27.css",
+    "src": "resources/js/registro-app.css"
+  },
+  "formulario.css": {
+    "file": "assets/formulario.f91cf85a.css",
+    "src": "formulario.css"
+  },
+  "resources/css/app.css": {
+    "file": "assets/app.64e0fd53.css",
+    "src": "resources/css/app.css",
+    "isEntry": true
+  }
+}
