@@ -1408,4 +1408,3 @@ $window.on('resize', function(){
 //end of IIFE function
 
 })();
-

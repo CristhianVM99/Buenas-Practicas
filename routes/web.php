@@ -12,12 +12,14 @@ use App\Http\Controllers\EntidadController;
 use App\Http\Controllers\IdeaProyectoController;
 use App\Http\Controllers\DocumentoController;
 use App\Http\Controllers\CiudadController;
+use App\Http\Controllers\MapaController;
 use Laravel\Socialite\Facades\Socialite;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
 Route::get('/video/{video}', [VideoController::class, 'index'])->name('video.ver');
 Route::get('/equipo', [AutorController::class, 'team'])->name('team');
+Route::get('/mapa',[MapaController::class, 'index'])->name('mapa');
 Route::get('/autor/{autor}/', [AutorController::class, 'getAutorCompleted'])->name('autor.get');
 Route::get('/post/{proyecto}', [IdeaProyectoController::class, 'post'])->name('post')->middleware('isPublished');
 

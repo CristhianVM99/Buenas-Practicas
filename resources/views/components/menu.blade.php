@@ -113,6 +113,9 @@
                             <li>
                                 <a href="{{route('home')}}#biblioteca">Biblioteca</a>
                             </li>
+                            <li>
+                                <a href="{{route('mapa')}}">Mapa</a>
+                            </li>
                             <!-- eof pages -->
                             <li>
                                 <a href="{{route('home')}}#experiencias">Experiencias</a>
