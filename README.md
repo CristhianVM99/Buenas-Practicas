@@ -34,6 +34,12 @@ composer install
 ```
 npm install
 ```
+php artisan key:generate
+php artisan migrate --seed
+php artisan storage:link
+
+bcrypt
+php artisan tinker
 
 ### Despliegue 📦
 

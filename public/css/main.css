@@ -7129,6 +7129,7 @@ body.boxed {
 .header_white {
 	color: #808080;
 	background-color: #ffffff;
+	z-index: 1001;
 }
 
 .header_white.affix {
