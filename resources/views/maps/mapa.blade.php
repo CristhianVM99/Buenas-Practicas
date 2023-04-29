@@ -12,6 +12,5 @@
     <script>
         var datos = @json($listaIdeasProyecto);
         var documentos = @json($documentos)
-    </script>
-    <script src="{{ asset('js/leaflet.js') }}"></script>
+    </script>    
 @endsection

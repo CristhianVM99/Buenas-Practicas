@@ -1,6 +1,5 @@
 <style>
-    .media a img 
-    {
+    .media a img {
         width: 100px;
     }
 </style>
@@ -28,20 +27,7 @@
                 <div class="widget widget_recent_posts">
                     <h3 class="widget-title">Videos Recientes</h3>
                     <ul>
-
-                                    <li class="media">
-                                            <img src="#" alt="" srcset="">
-                                        <div class="media-body media-middle">
-                                            <p class="darklinks">
-                                                <a href="blog-single-left.html">Rump groud round shan bacon chop.</a>
-                                            </p>
-                                            <span class="small-text highlightlinks">
-                                                <a href="blog-single-left.html">
-                                                    <time datetime="2017-10-03T08:50:40+00:00"> 11 jan, 2018</time>
-                                                </a>
-                                            </span>
-                                        </div>
-                                    </li>
+                        videos
                     </ul>
                 </div>
             </div>

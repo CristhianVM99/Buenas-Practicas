@@ -1,5 +1,5 @@
 import "leaflet/dist/leaflet.css";
-import L from "leaflet";
+import L, { DomUtil, marker } from "leaflet";
 
 import "leaflet.markercluster/dist/leaflet.markercluster-src";
 import "leaflet.markercluster/dist/MarkerCluster.css";
@@ -19,6 +19,7 @@ import "leaflet-search/dist/leaflet-search.src";
 import "leaflet-search/dist/leaflet-search.src.css";
 
 import "../css/leaflet.css";
+import axios from "axios";
 
 //crea una instancia de tu mapa de leaflet
 const map = L.map("mapid", {
@@ -103,6 +104,7 @@ datos.forEach((element) => {
             img: getImg(element.proyecto.id),
             content: element.proyecto.descripcion,
             name: element.proyecto.titulo,
+            popularidad: element.proyecto.popularidad,
         }).bindPopup(element.proyecto.titulo);
         markers_ideas_innovadoras.addLayer(marker);
     }
@@ -114,10 +116,109 @@ datos.forEach((element) => {
             img: getImg(element.proyecto.id),
             content: element.proyecto.descripcion,
             name: element.proyecto.titulo,
+            popularidad: element.proyecto.popularidad,
         }).bindPopup(element.proyecto.titulo);
         markers_buenas_practicas.addLayer(marker);
     }
 });
+
+function compartir() {
+    let btn_compartir_facebook = document.getElementById("btn-facebook");
+    let btn_compartir_twitter = document.getElementById("btn-twitter");
+    let btn_compartir_instagram = document.getElementById("btn-instagram");
+
+    // Obtener la URL actual de la página
+    var url = window.location.href;
+
+    btn_compartir_facebook.addEventListener("click", () => {
+        var metaTitle = document.querySelector('meta[property="og:title"]');
+        metaTitle.setAttribute("content", "buena practica");
+
+        var metaImage = document.querySelector('meta[property="og:image"]');
+        metaImage.setAttribute(
+            "content",
+            "https://empresa.org.ar/wp-content/uploads/2019/01/gestion-de-proyectos-1.jpeg"
+        );
+
+        // Crear la URL de compartir en Facebook
+        var facebookUrl =
+            "https://www.facebook.com/sharer/sharer.php?u=" +
+            encodeURIComponent(url);
+
+        // Abrir la página de compartir en Facebook en una nueva pestaña
+        //window.open(facebookUrl, "_blank");
+        window.open(
+            facebookUrl,
+            "Compartir en Facebook",
+            "width=600,height=400"
+        );
+    });
+    btn_compartir_twitter.addEventListener("click", () => {
+        // Crear la URL de compartir en Twitter
+        var twitterUrl =
+            "https://twitter.com/intent/tweet?url=" + encodeURIComponent(url);
+
+        // Abrir la página de compartir en Twitter en una nueva pestaña
+        window.open(twitterUrl, "_blank");
+    });
+    btn_compartir_instagram.addEventListener("click", () => {
+        // Obtener la URL actual de la página
+        var url = window.location.href;
+
+        // Crear la URL de compartir en Instagram
+        var instagramUrl =
+            "https://www.instagram.com/accounts/login/?next=%2Fcreate%2F";
+
+        // Abrir la página de compartir en Instagram en una nueva pestaña
+        window.open(instagramUrl, "_blank");
+    });
+}
+/*============================ formulario like ============ */
+function FormLike() {
+    let span = document.getElementById("like");
+    const form = document.getElementById("formlike");
+    let btn = document.getElementById("btn-favorite");
+    form.addEventListener("submit", function (event) {
+        event.preventDefault();
+        const formData = new FormData(this);
+        let id = document.getElementById("id_value").value;            
+        axios
+            .post("/like", formData)
+            .then(function (response) {
+                const beforelikes = JSON.parse(localStorage.getItem("like"));
+                beforelikes.push({
+                    id: id,
+                    estado: true,
+                });
+                localStorage.setItem("like", JSON.stringify(beforelikes));
+                console.log("datos ingresados");
+                console.log(beforelikes);
+                span.innerHTML = parseInt(span.innerHTML)+1;
+                btn.style.color = "#ff0000";
+                span.style.color = "#fff";                 
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+    });
+}
+
+/*================== like marker ================ */
+function recorrer_cache() {
+    let id = document.getElementById("id_value").value;
+    let btn = document.getElementById("btn-favorite");
+    let span = document.getElementById("like");
+    const cache = JSON.parse(localStorage.getItem("like"));
+    console.log("datos obtenidos");
+    console.log(cache);
+    for (const item of cache) {
+        if (item.id == id) {
+            btn.style.color = "#ff0000";
+            span.style.color = "#fff";    
+            span.innerHTML = parseInt(span.innerHTML)+1;
+        }
+    }
+}
 
 //añadimos una funciona a cada marcador
 markers_buenas_practicas.on("click", function (a) {
@@ -131,19 +232,39 @@ markers_buenas_practicas.on("click", function (a) {
                     <h1>${a.layer.options.name}</h1>
                     <p class="icon-type"><i class="fa-solid fa-trophy"></i>
                     ${a.layer.options.type}</p>
+                    <div class="redes-sociales">  
+                        <p>Comparte en tus redes sociales</p>                                      
+                        <ul class="wrapper">
+                            <li class="icon facebook">
+                                <span class="tooltip">Facebook</span>
+                                <span><button class="btn-facebook" id="btn-facebook"><i class="fa-brands fa-facebook-f"></i></button></span>
+                            </li>
+                            <li class="icon twitter">
+                                <span class="tooltip">Twitter</span>
+                                <span><button class="btn-twitter" id="btn-twitter"><i class="fa-brands fa-twitter"></i></button></span>
+                            </li>
+                            <li class="icon instagram">
+                                <span class="tooltip">Instagram</span>
+                                <span><button class="btn-instagram" id="btn-instagram"><i class="fa-brands fa-instagram"></i></button></span>
+                            </li>
+                        </ul>                    
+                    </div>
                 </header>
                 <div class="item-media entry-thumbnail img-type">
                     <img src="${a.layer.options.img}" alt=""> 
+                    <form id="formlike">
+                        <input type="hidden" id="id_value" name="id" value="${window.btoa(
+                            a.layer.options.id
+                        )}">
+                        <button type="submit" id="btn-favorite" class="btn-favorite"><i class="fa-solid fa-heart"></i><span id="like">${
+                            a.layer.options.popularidad
+                        }</span></button>
+                    </form>
                 </div>
                 <div class="item-content content-type">                
                     <div class="entry-content">
                         <p>${a.layer.options.content}</p>
-                    </div>
-                    <div class="btn-content">
-                        <button class="btn-compartir" id="btn-compartir">
-                        compartir Idea
-                        </button>
-                    </div>                
+                    </div>             
                 </div>                
             </article>
         </div>`
@@ -151,6 +272,9 @@ markers_buenas_practicas.on("click", function (a) {
     sidebar.show();
     let buenas_practicas = document.getElementById("sidebar");
     buenas_practicas.style.background = "#00c6ff";
+    compartir();
+    FormLike();
+    recorrer_cache();
 });
 
 //añadimos una funciona a cada marcador
@@ -163,20 +287,44 @@ markers_ideas_innovadoras.on("click", function (a) {
             <article class="post vertical-item content-padding with_background rounded overflow_hidden loop-color sidebar-map-item">
                 <header class="entry-header">
                     <h1>${a.layer.options.name}</h1>                    
-                    <p class="icon-type"><i class="fa-solid fa-lightbulb icon-title"></i>${a.layer.options.type}</p>
+                    <p class="icon-type"><i class="fa-solid fa-lightbulb icon-title"></i>${
+                        a.layer.options.type
+                    }</p>
+                    <div class="redes-sociales"> 
+                    <p>Comparte en tus redes sociales</p>                                      
+                        <ul class="wrapper">
+                            <li class="icon facebook">
+                                <span class="tooltip">Facebook</span>
+                                <span><button class="btn-facebook" id="btn-facebook"><i class="fa-brands fa-facebook-f"></i></button></span>
+                            </li>
+                            <li class="icon twitter">
+                                <span class="tooltip">Twitter</span>
+                                <span><button class="btn-twitter" id="btn-twitter"><i class="fa-brands fa-twitter"></i></button></span>
+                            </li>
+                            <li class="icon instagram">
+                                <span class="tooltip">Instagram</span>
+                                <span><button class="btn-instagram" id="btn-instagram"><i class="fa-brands fa-instagram"></i></button></span>
+                            </li>
+                        </ul>                    
+                    </div>
                 </header>
                 <div class="item-media entry-thumbnail img-type">
-                    <img src="${a.layer.options.img}" alt=""> 
+                    <img src="${
+                        a.layer.options.img
+                    }" alt="">                     
+                    <form id="formlike">                                                
+                        <input type="hidden" id="id_value" name="id" value="${window.btoa(
+                            a.layer.options.id
+                        )}">
+                        <button type="submit" id="btn-favorite" class="btn-favorite"><i class="fa-solid fa-heart"></i><span id="like">${
+                            a.layer.options.popularidad
+                        }</span></button>
+                    </form>
                 </div>
                 <div class="item-content content-type">                    
                     <div class="entry-content">
                         <p>${a.layer.options.content}</p>
-                    </div>
-                    <div class="btn-content">
-                        <button class="btn-compartir" id="btn-compartir">
-                        compartir Idea
-                        </button>
-                    </div>    
+                    </div>   
                 </button>
                 </div>                
             </article>
@@ -185,6 +333,9 @@ markers_ideas_innovadoras.on("click", function (a) {
     sidebar.show();
     let ideas_innovadoras = document.getElementById("sidebar");
     ideas_innovadoras.style.background = "#FDC830";
+    compartir();
+    FormLike();
+    recorrer_cache();
 });
 
 markers_buenas_practicas.on("mouseover", function (e) {
@@ -241,8 +392,15 @@ map.addControl(searchControl);
 
 //una vez encontrado el buscador realizamos un zoom en el marcador
 searchControl.on("search:locationfound", function (e) {
-    map.setView(e.latlng, 5); // Zoom a la posición del marcador encontrado con un nivel de zoom de 16
+    console.log(e)
+    map.setView(e.latlng, 5); // Zoom a la posición del marcador encontrado con un nivel de zoom de 16    
 });
+
+// Agregar un controlador de eventos para el evento "search:cancel"
+searchControl.on("search:cancel", function (e) {
+    console.log(searchControl.marker)
+});
+
 
 /*map.on('click', function(e) {
     searchControl.reset();
@@ -258,44 +416,23 @@ function cargarMapa() {
     if (id) {
         localizarMarkerPorId(id);
     }
+
+    //generar cache
+    const CacheItems = [];
+    localStorage.setItem("like", JSON.stringify(CacheItems));
 }
 
 /*======================= buscar un marker por su ID ================= */
 function localizarMarkerPorId(id) {
     // Buscar el marker correspondiente al ID
-
-    /*var markers = markers_buenas_practicas.getLayers();
-
-    for (var i = 0; i < markers.length; i++) {
-        var marker = markers[i];
-        console.log(marker.id); // Imprimir la posición del marker
-        // Hacer algo más con el marker...
-    }
-    /*var marker = null;
-    markers_buenas_practicas.forEach(element => {
-        if (window.btoa(markers_buenas_practicas[i].options.id) === id) {
-            marker = markers_buenas_practicas[i];
-            console.log(window.btoa(markers_buenas_practicas[i].options.id));
-        }
-    }); 
-    
-    markers_ideas_innovadoras.forEach(element => {
-        if (window.btoa(markers_buenas_practicas[i].options.id) === id) {
-            marker = markers_buenas_practicas[i];
-            console.log(window.btoa(markers_buenas_practicas[i].options.id));
-        }
-    }); 
-    */
     let marker = null;
     markers_buenas_practicas.eachLayer(function (layer) {
-        console.log(layer.options.id);
         if (layer.options.id == window.atob(id)) {
             marker = layer;
         }
     });
 
     markers_ideas_innovadoras.eachLayer(function (layer) {
-        console.log(layer.options.id);
         if (layer.options.id == window.atob(id)) {
             marker = layer;
         }
@@ -307,24 +444,6 @@ function localizarMarkerPorId(id) {
     } else {
         console.log("marker NO encontrado");
     }
-
-    console.log("id optenido" + window.atob(id));
 }
+
 cargarMapa();
-
-/*=================== FUNCION DE COMPARTIR LA URL ============= */
-
-// Obtener la referencia al botón
-var shareBtn = document.getElementById('btn-compartir');
-
-// Agregar un controlador de eventos de clic al botón
-shareBtn.addEventListener('click', function() {
-  // Obtener la URL actual de la página
-  var url = window.location.href;
-  
-  // Crear la URL de compartición con la URL actual y el nivel de zoom actual del mapa
-  var shareUrl = url + "?zoom=" + map.getZoom() + "&lat=" + map.getCenter().lat + "&lng=" + map.getCenter().lng;
-  
-  // Mostrar la URL en un cuadro de diálogo
-  alert("Compartir esta URL: " + shareUrl);
-});

@@ -20,6 +20,7 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/video/{video}', [VideoController::class, 'index'])->name('video.ver');
 Route::get('/equipo', [AutorController::class, 'team'])->name('team');
 Route::get('/mapa',[MapaController::class, 'index'])->name('mapa');
+Route::post('/like',[MapaController::class, 'like']);
 Route::get('/autor/{autor}/', [AutorController::class, 'getAutorCompleted'])->name('autor.get');
 Route::get('/post/{proyecto}', [IdeaProyectoController::class, 'post'])->name('post')->middleware('isPublished');
 

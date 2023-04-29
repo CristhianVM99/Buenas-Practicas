@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Ciudad;
 use App\Models\Documento;
 use App\Models\IdeaProyecto;
-
+use Illuminate\Http\Request;
 
 class MapaController extends Controller
 {
@@ -36,5 +36,18 @@ class MapaController extends Controller
             'documentos' => $Documentos
         ];        
         return view('maps.mapa', $extras);
+    }
+
+    public function like(Request $request)
+    {
+        $id = base64_decode($request->input('id'));        
+        $Proyecto = IdeaProyecto::find($id);        
+        $Proyecto->popularidad += 1;
+        $Proyecto->save();
+        if (!$Proyecto) {
+            // Si no se encontró el registro, lanza una excepción o retorna un error
+            throw new \InvalidArgumentException("El registro con ID $id no existe");
+        }
+        response()->json(['mensaje' => $id]);
     }
 }
