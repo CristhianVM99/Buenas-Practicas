@@ -143,4 +143,35 @@
         </form>
     </div>
 </section>
+
+  <!-- Modal -->
+  <div class="modal" id="modal_image" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content rounded-xl">
+            <div class="modal-header flex">
+                <h5 class="modal-title text-sm font-bold grow ml-[10px]" id="modalLabel">{{__("Crop Image Before Change")}}</h5>
+                <a class="cursor-pointer self-start danger_color hover:scale-110 hover:text-red-700 mr-2" data-dismiss="modal" aria-label="Close">
+                    <i class="fa fa-close"></i>
+                </a>
+            </div>
+            <div class="modal-body">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-8">
+                        <img src="./images/gallery/02.jpg" alt="" id="crop_image">
+                    </div>
+                    <div class="col-md-4">
+                        <h5 class="modal-title text-sm font-bold grow ml-[10px] text-center" id="modalLabel">{{__("Preview")}}</h5>
+                        <div class="preview round w-[160px] h-[160px] m-[10px] border border-green-700 overflow-hidden"></div>
+                    </div>
+                </div>
+            </div>
+            </div>
+            <div class="modal-footer">
+                <a class="cursor-pointer theme_button min_width_button color2 " id="crop">{{__("Crop")}}</a>
+                <a class="cursor-pointer theme_button min_width_button danger_bg_color" data-dismiss="modal">{{__("Close")}}</a>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection

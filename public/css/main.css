@@ -1449,7 +1449,7 @@ input[type*="password"],
 /* modal */
 .modal-backdrop.in {
 	filter: alpha(opacity=80);
-	opacity: .8;
+	opacity: .8;;
 }
 
 .modal-content {

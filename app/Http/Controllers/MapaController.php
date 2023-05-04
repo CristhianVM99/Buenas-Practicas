@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Categoria;
 use App\Models\Ciudad;
 use App\Models\Documento;
 use App\Models\IdeaProyecto;
+use App\Models\Pais;
+use App\Models\Sector;
 use Illuminate\Http\Request;
 
 class MapaController extends Controller
@@ -16,16 +19,19 @@ class MapaController extends Controller
         $Ciudades = Ciudad::all();
         $Documentos = Documento::all();
         $listaProyectos = [];
+        $Paises = Pais::all();
+        $ods = Categoria::all();
+        $sectores = Sector::all();
 
         foreach($Proyectos as $proy){
                 foreach($Ciudades as $ciudad){
                     if($ciudad->id == $proy->ciudad)
                     {
                         if($proy->tipo == 1){
-                            $objeto = ['proyecto'=>$proy,'lat'=>$ciudad->lat,'lng'=>$ciudad->lng,'type'=>'idea inovadora'];
+                            $objeto = ['proyecto'=>$proy,'ciudad'=>$ciudad->name,'lat'=>$ciudad->lat,'lng'=>$ciudad->lng,'type'=>'idea inovadora'];
                             array_push($listaProyectos,$objeto);
                         }else{
-                            $objeto = ['proyecto'=>$proy,'lat'=>$ciudad->lat,'lng'=>$ciudad->lng,'type'=>'buena practica'];
+                            $objeto = ['proyecto'=>$proy,'ciudad'=>$ciudad->name,'lat'=>$ciudad->lat,'lng'=>$ciudad->lng,'type'=>'buena practica'];
                             array_push($listaProyectos,$objeto);
                         }
                     }
@@ -33,7 +39,10 @@ class MapaController extends Controller
         }
         $extras = [            
             'listaIdeasProyecto' => $listaProyectos,            
-            'documentos' => $Documentos
+            'documentos' => $Documentos,
+            'paises' => $Paises,
+            'ods' => $ods,
+            'sectores' => $sectores,
         ];        
         return view('maps.mapa', $extras);
     }

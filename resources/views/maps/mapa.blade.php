@@ -11,6 +11,9 @@
     </div>
     <script>
         var datos = @json($listaIdeasProyecto);
-        var documentos = @json($documentos)
+        var documentos = @json($documentos);
+        var paises = @json($paises);
+        var categorias = @json($ods);
+        var sectores = @json($sectores)
     </script>    
 @endsection

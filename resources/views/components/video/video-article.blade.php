@@ -24,8 +24,8 @@
         <img class= "flag" src="{{$bandera}}" alt="No">
     </div>
     <div class="item-content">
-        <h4 class="entry-title topmargin_5"> <a href="@if ($videoLink) {{$videoLink}} @endif">{{$titulo}}</a></h4>
-        <p class="content-3lines-ellipsis">{{$descripcion}}</p>
+        <h4 class="entry-title pb-3 topmargin_5"> <a href="@if ($videoLink) {{$videoLink}} @endif">{{$titulo}}</a></h4>
+        <p class="content-3lines-ellipsis p-2">{{$descripcion}}</p>
     </div>
 </article>  
 @endif
@@ -53,7 +53,7 @@
             <div class="col-md-7">                
                 <div class="padding_30 overflow_hidden">
                     <h3 class="entry-title color2 "> <a href="@if ($videoLink) {{$videoLink}} @endif">{{$titulo}}</a> </h3>
-                    <p>{{$descripcion}}</p>
+                    <p class="">{{$descripcion}}</p>
                 </div>
             </div>
         </div>

@@ -85,6 +85,7 @@ var markers_buenas_practicas = L.markerClusterGroup({
 });
 map.addLayer(markers_buenas_practicas);
 
+/*=============== funcion que retorna la url de una imagen ============ */
 function getImg(id) {
     let url = "#";
     documentos.forEach((element) => {
@@ -95,31 +96,90 @@ function getImg(id) {
     return url;
 }
 
-datos.forEach((element) => {
+/*================ funcion para retornar la bandera de un pais =============== */
+function getPais(pais){
+    let datos = [];
+    paises.forEach((element) => {
+        if(element.code==pais){
+            datos.push({
+                url: element.flag_4x3,
+                nombre: element.name,
+            });
+        }
+    })
+    return datos;
+}
+
+/*=============== funcion para retornar los ODS de un proyecto =============== */
+
+function getODS(cadena){
+    let cate = [];
+    categorias.forEach((cat) => {
+        cadena.forEach((cad_cat) => {
+            if(cat.id == cad_cat){
+                cate.push({
+                    nombre: cat.name,
+                    icono_url:  "img/SDG/"+cat.icon
+                })   
+            }
+        })
+    }) 
+    return cate;
+}
+
+/*============= funcion para retornar el sector ====================  */
+function getSector(id){
+    let sector = "";
+    sectores.forEach((element) => {
+        if(element.id == id){
+            sector = element.name
+        }
+    })
+    return sector
+}
+
+
+datos.forEach((element) => {    
     if (element.type == "idea inovadora") {
+        let p = getPais(element.proyecto.pais) 
         let marker = L.marker([element.lat, element.lng], {
             id: element.proyecto.id,
             icon: ideaMarker,
             type: element.type,
             img: getImg(element.proyecto.id),
+            pais: p[0].url,
+            pais_name: p[0].nombre,
+            ods: getODS(JSON.parse(element.proyecto.ods)),
+            sector : getSector(element.proyecto.sector),
             content: element.proyecto.descripcion,
             name: element.proyecto.titulo,
+            ciudad: element.ciudad,
             popularidad: element.proyecto.popularidad,
+            entidad: element.proyecto.entidad,
+            poblacion: element.proyecto.poblacion,
         }).bindPopup(element.proyecto.titulo);
         markers_ideas_innovadoras.addLayer(marker);
     }
     if (element.type == "buena practica") {
+        let p = getPais(element.proyecto.pais) 
         let marker = L.marker([element.lat, element.lng], {
             id: element.proyecto.id,
             icon: proyectoMarker,
             type: element.type,
-            img: getImg(element.proyecto.id),
+            img: getImg(element.proyecto.id),            
+            pais: p[0].url,
+            pais_name: p[0].nombre,
+            ods: getODS(JSON.parse(element.proyecto.ods)),
+            sector : getSector(element.proyecto.sector),
             content: element.proyecto.descripcion,
             name: element.proyecto.titulo,
-            popularidad: element.proyecto.popularidad,
+            ciudad: element.ciudad,
+            popularidad: element.proyecto.popularidad,  
+            entidad: element.proyecto.entidad,
+            poblacion: element.proyecto.poblacion,
         }).bindPopup(element.proyecto.titulo);
-        markers_buenas_practicas.addLayer(marker);
-    }
+        markers_buenas_practicas.addLayer(marker);        
+    }    
 });
 
 function compartir() {
@@ -129,29 +189,37 @@ function compartir() {
 
     // Obtener la URL actual de la página
     var url = window.location.href;
+    var title = "Titulo de Prueba";
+    var descripcion = "Descripcion de Prueba";
+    var img = "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.france24.com%2Fes%2F20190409-gatos-reconocen-nombre-ignorar-estudio&psig=AOvVaw1ZfMmwnk9mxVW6s8awape-&ust=1682896629536000&source=images&cd=vfe&ved=0CBEQjRxqFwoTCNjdktCc0P4CFQAAAAAdAAAAABAE"
 
     btn_compartir_facebook.addEventListener("click", () => {
-        var metaTitle = document.querySelector('meta[property="og:title"]');
+        /*var metaTitle = document.querySelector('meta[property="og:title"]');
         metaTitle.setAttribute("content", "buena practica");
 
         var metaImage = document.querySelector('meta[property="og:image"]');
         metaImage.setAttribute(
             "content",
             "https://empresa.org.ar/wp-content/uploads/2019/01/gestion-de-proyectos-1.jpeg"
-        );
+        );*/
 
         // Crear la URL de compartir en Facebook
         var facebookUrl =
             "https://www.facebook.com/sharer/sharer.php?u=" +
-            encodeURIComponent(url);
+            encodeURIComponent(url) +
+            "&og:title="+ encodeURIComponent(title) +
+            "&og:description="+ encodeURIComponent(descripcion) +
+            "&og:image="+ encodeURIComponent(img)
+            ;
 
         // Abrir la página de compartir en Facebook en una nueva pestaña
         //window.open(facebookUrl, "_blank");
-        window.open(
+        /*window.open(
             facebookUrl,
             "Compartir en Facebook",
             "width=600,height=400"
-        );
+        );*/
+        window.open(facebookUrl, "_blank", "toolbar=yes,scrollbars=yes,resizable=yes,top=500,left=500,width=400,height=400");
     });
     btn_compartir_twitter.addEventListener("click", () => {
         // Crear la URL de compartir en Twitter
@@ -190,9 +258,7 @@ function FormLike() {
                     id: id,
                     estado: true,
                 });
-                localStorage.setItem("like", JSON.stringify(beforelikes));
-                console.log("datos ingresados");
-                console.log(beforelikes);
+                localStorage.setItem("like", JSON.stringify(beforelikes));                
                 span.innerHTML = parseInt(span.innerHTML)+1;
                 btn.style.color = "#ff0000";
                 span.style.color = "#fff";                 
@@ -208,9 +274,7 @@ function recorrer_cache() {
     let id = document.getElementById("id_value").value;
     let btn = document.getElementById("btn-favorite");
     let span = document.getElementById("like");
-    const cache = JSON.parse(localStorage.getItem("like"));
-    console.log("datos obtenidos");
-    console.log(cache);
+    const cache = JSON.parse(localStorage.getItem("like"));    
     for (const item of cache) {
         if (item.id == id) {
             btn.style.color = "#ff0000";
@@ -252,6 +316,8 @@ markers_buenas_practicas.on("click", function (a) {
                 </header>
                 <div class="item-media entry-thumbnail img-type">
                     <img src="${a.layer.options.img}" alt=""> 
+                    <img class="pais" src="${a.layer.options.pais}" alt="">
+                    <span class="sector">${a.layer.options.sector}</span>
                     <form id="formlike">
                         <input type="hidden" id="id_value" name="id" value="${window.btoa(
                             a.layer.options.id
@@ -263,8 +329,20 @@ markers_buenas_practicas.on("click", function (a) {
                 </div>
                 <div class="item-content content-type">                
                     <div class="entry-content">
+                        <span class="l-pais_name">${a.layer.options.pais_name}</span>
+                        <span class="l-ciudad">${a.layer.options.ciudad}</span>
                         <p>${a.layer.options.content}</p>
-                    </div>             
+                        <p>Poblacion Beneficiada: <span class="poblacion">${a.layer.options.poblacion}</span></p>
+                        <div class="ods">
+                        ${
+                            a.layer.options.ods['nombre']
+                        }
+                        </div>
+                        <div>
+                            <h3>Entidades que patrocinan el proyecto</h3>
+                            <p class="entidad">${a.layer.options.entidad}</p>
+                        </div>  
+                    </div>                                 
                 </div>                
             </article>
         </div>`
@@ -309,9 +387,9 @@ markers_ideas_innovadoras.on("click", function (a) {
                     </div>
                 </header>
                 <div class="item-media entry-thumbnail img-type">
-                    <img src="${
-                        a.layer.options.img
-                    }" alt="">                     
+                    <img src="${a.layer.options.img}" alt="">   
+                    <img class="pais" src="${a.layer.options.pais}" alt=""> 
+                    <span class="sector">${a.layer.options.sector}</span>                 
                     <form id="formlike">                                                
                         <input type="hidden" id="id_value" name="id" value="${window.btoa(
                             a.layer.options.id
@@ -323,7 +401,19 @@ markers_ideas_innovadoras.on("click", function (a) {
                 </div>
                 <div class="item-content content-type">                    
                     <div class="entry-content">
+                        <span class="l-pais_name">${a.layer.options.pais_name}</span>
+                        <span class="l-ciudad">${a.layer.options.ciudad}</span>
                         <p>${a.layer.options.content}</p>
+                        <p>Poblacion Beneficiada: <span class="poblacion">${a.layer.options.poblacion}</span></p>
+                        <div class="ods">
+                        ${
+                            a.layer.options.ods['nombre']
+                        }
+                        </div>
+                        <div>
+                            <h3>Entidades que patrocinan el proyecto</h3>
+                            <p class="entidad">${a.layer.options.entidad}</p>
+                        </div>            
                     </div>   
                 </button>
                 </div>                
@@ -360,9 +450,9 @@ var layerGroupTotal = L.layerGroup([
 ]);
 
 var OverLayMaps = {
-    "Ideas Innovadoras": markers_ideas_innovadoras,
-    "Buenas Practicas": markers_buenas_practicas,
-    Ambos: layerGroupTotal,
+    '<i class="fa-solid fa-lightbulb icon-title"></i> Ideas Innovadoras': markers_ideas_innovadoras,
+    '<i class="fa-solid fa-trophy"></i> Buenas Practicas': markers_buenas_practicas,
+    'Ambos': layerGroupTotal,
 };
 L.control.layers(OverLayMaps).addTo(map);
 
@@ -373,6 +463,12 @@ var searchControl = new L.Control.Search({
     textPlaceholder: "Buscar ...",
     //initial: false,
     //autoCollapse: false,
+    /*filterData: function(text, records){
+        console.log("texto")
+        console.log(text)
+        console.log("records")
+        console.log(records)
+    }*/
     /*filterData: function(text, records) {
         var searchWords = text.trim().toLowerCase().split(' ');
         return records.filter(function(record) {
@@ -400,11 +496,6 @@ searchControl.on("search:locationfound", function (e) {
 searchControl.on("search:cancel", function (e) {
     console.log(searchControl.marker)
 });
-
-
-/*map.on('click', function(e) {
-    searchControl.reset();
-});*/
 
 //posicion de los botones de zoom del mapa
 map.zoomControl.setPosition("bottomright");

@@ -109,7 +109,7 @@
         <div class="modal-content rounded-xl">
             <div class="modal-header flex">
                 <h5 class="modal-title text-sm font-bold grow ml-[10px]" id="modalLabel">{{__("Crop Image Before Change")}}</h5>
-                <a class="cursor-pointer self-start danger_color hover:scale-110 hover:text-red-700" data-dismiss="modal" aria-label="Close">
+                <a class="cursor-pointer self-start danger_color hover:scale-110 hover:text-red-700 mr-2" data-dismiss="modal" aria-label="Close">
                     <i class="fa fa-close"></i>
                 </a>
             </div>
@@ -120,7 +120,8 @@
                         <img src="./images/gallery/02.jpg" alt="" id="crop_image">
                     </div>
                     <div class="col-md-4">
-                        <div class="preview round w-[160px] h-[160px] m-[10px] border border-red-500 overflow-hidden"></div>
+                        <h5 class="modal-title text-sm font-bold grow ml-[10px] text-center" id="modalLabel">{{__("Preview")}}</h5>
+                        <div class="preview round w-[160px] h-[160px] m-[10px] border border-green-700 overflow-hidden"></div>
                     </div>
                 </div>
             </div>

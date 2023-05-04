@@ -111,7 +111,7 @@ input[disabled] {
 
 .product .images:hover img,
 .product .thumbnails a:hover img,
-.product .item-media:hover img {
+.product .item-media:hover .img-experiencias {
 	opacity: 0.8;
 	-webkit-transform: scale(1.1);
 	transform: scale(1.1);
@@ -360,7 +360,7 @@ li.product {
 
 .product-buttons a.facebook_button:hover {
 	color: #ffffff;
-	background-color: rgba(67, 100, 172, 0.685);
+	background-color: #3b5998;
 }
 
 .product-buttons a.facebook_button:before {
