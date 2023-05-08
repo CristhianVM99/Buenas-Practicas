@@ -22,6 +22,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css"
         integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@5.3.0/dist/photoswipe.css">
+    <link rel="stylesheet" href="./photoswipe-dynamic-caption-plugin.css">
     @yield('styles-css')
     <script src="{{ url('js/vendor/modernizr-2.6.2.min.js') }}"></script>
     @vite(['resources/css/app.css', 'resources/js/app.js'])

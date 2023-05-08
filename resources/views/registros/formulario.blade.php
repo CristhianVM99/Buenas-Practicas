@@ -103,7 +103,7 @@ action="{{ route('registro.crear') }}"
       <!-- Presupuesto -->
       <div class="mt-4">
         <x-input-label for="presupuesto" :value="__('Presupuesto')" />
-        <x-text-input id="presupuesto" class="block mt-1 w-full" type="text" name="presupuesto" :value="old('presupuesto', isset($registro)?$registro->presupuest: null)" autofocus placeholder="Cantidad de presupuesto"/>
+        <x-text-input id="presupuesto" class="block mt-1 w-full" type="text" name="presupuesto" :value="old('presupuesto', isset($registro)?$registro->presupuesto: null)" autofocus placeholder="Cantidad de presupuesto"/>
         <x-input-error :messages="$errors->get('presupuesto')" class="mt-2" />
       </div>
     </div>  

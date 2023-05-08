@@ -58,10 +58,14 @@ $('form#registro').on('submit', function(e, tipoClick = null) {
         mostrarToast({clase:'info', mensaje:'Se está Creando un nuevo registro para guardar los Documentos'});
     submitForm(this)
     .then( response => {
+        console.log("datos de respuesta sobre el fomulario")
+        console.log(response)
         if( response.status == 200 ) {
             /***** Obtienen los archivos que se subiran una vez creado el registro. *****/
             let $uploadFiles = $("article.panel-documentos .subirFile");
             let registro     = response.data.registro?? response.data;
+            console.log("datos del formulario despues de ser enviado")
+            console.log(registro)
             if( response.data.mensaje ){
                 mostrarToast({clase:'success',mensaje:response.data.mensaje});
             }
@@ -93,12 +97,16 @@ $('form#registro').on('submit', function(e, tipoClick = null) {
 });
 
 async function submitForm(form){
+    console.log("datos del formulario desde submitForm")
+    console.log(form)
     let jsonData = $(form).serializeArray()
     .reduce(function(a, z) { a[z.name] = z.value; return a; }, {});
     jsonData.ods = JSON.stringify(list_ods($('.ods .marco.active')));
     if($('input#estado').length == 1){
         jsonData.estado = $('input#estado').is(':checked');
     } 
+    console.log("datos del formulario desde submitForm 2")
+    console.log(jsonData)
     return await axios.post(
         form.action,
         jsonData,

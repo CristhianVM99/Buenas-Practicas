@@ -53,6 +53,7 @@ class IdeaProyectoController extends Controller
         return response()->json([
             'registro' => $registro, 
             'mensaje'  => 'Registro Creado!', 
+            'datos'=> $data,
             'redirect' => route('profile.edit')
         ]);
     }

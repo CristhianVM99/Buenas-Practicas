@@ -1,5 +1,5 @@
 import "leaflet/dist/leaflet.css";
-import L, { DomUtil, marker } from "leaflet";
+import L, { DomUtil, icon, marker } from "leaflet";
 
 import "leaflet.markercluster/dist/leaflet.markercluster-src";
 import "leaflet.markercluster/dist/MarkerCluster.css";
@@ -20,6 +20,11 @@ import "leaflet-search/dist/leaflet-search.src.css";
 
 import "../css/leaflet.css";
 import axios from "axios";
+
+
+//import PhotoSwipeLightbox from 'photoswipe/lightbox';
+import PhotoSwipeLightbox from '/photoswipe/photoswipe-lightbox.esm.js';
+import 'photoswipe/style.css';
 
 //crea una instancia de tu mapa de leaflet
 const map = L.map("mapid", {
@@ -55,35 +60,16 @@ var proyectoMarker = L.ExtraMarkers.icon({
     prefix: "fa-solid",
 });
 
-//adicionamos un boton al mapa
-/*L.easyButton("fa-bars", function () {
-    sidebar.toggle();
-}).addTo(map);*/
-
-//L.marker([51.5, -0.09]).addTo(map).bindPopup("Aqui está Londres!").openPopup();
-//var marker = L.marker([51.5, -0.09]).bindPopup("hola mundo").addTo(map);
-
 map.on("click", function () {
     sidebar.hide();
 });
 
-//creacion del grupo de marcadores para ideas innovadoras
-var markers_ideas_innovadoras = L.markerClusterGroup({
-    spiderfyOnMaxZoom: true,
+var markadores = L.markerClusterGroup({
+    spiderfyOnMaxZoom: false,
     showCoverageOnHover: false,
     zoomToBoundsOnClick: true,
-    spiderLegPolylineOptions: { weight: 0.5, color: "#FDC830", opacity: 0.5 },
 });
-map.addLayer(markers_ideas_innovadoras);
-
-//creacion del grupo de marcadores para buenas practicas
-var markers_buenas_practicas = L.markerClusterGroup({
-    spiderfyOnMaxZoom: true,
-    showCoverageOnHover: false,
-    zoomToBoundsOnClick: true,
-    spiderLegPolylineOptions: { weight: 0.5, color: "#00c6ff", opacity: 0.5 },
-});
-map.addLayer(markers_buenas_practicas);
+map.addLayer(markadores);
 
 /*=============== funcion que retorna la url de una imagen ============ */
 function getImg(id) {
@@ -97,89 +83,73 @@ function getImg(id) {
 }
 
 /*================ funcion para retornar la bandera de un pais =============== */
-function getPais(pais){
+function getPais(pais) {
     let datos = [];
     paises.forEach((element) => {
-        if(element.code==pais){
+        if (element.code == pais) {
             datos.push({
                 url: element.flag_4x3,
                 nombre: element.name,
             });
         }
-    })
+    });
     return datos;
 }
 
 /*=============== funcion para retornar los ODS de un proyecto =============== */
 
-function getODS(cadena){
+function getODS(cadena) {
     let cate = [];
     categorias.forEach((cat) => {
         cadena.forEach((cad_cat) => {
-            if(cat.id == cad_cat){
+            if (cat.id == cad_cat) {
                 cate.push({
                     nombre: cat.name,
-                    icono_url:  "img/SDG/"+cat.icon
-                })   
+                    icono_url: "img/SDG/" + cat.icon,
+                });
             }
-        })
-    }) 
+        });
+    });
     return cate;
 }
 
 /*============= funcion para retornar el sector ====================  */
-function getSector(id){
+function getSector(id) {
     let sector = "";
     sectores.forEach((element) => {
-        if(element.id == id){
-            sector = element.name
+        if (element.id == id) {
+            sector = element.name;
         }
-    })
-    return sector
+    });
+    return sector;
 }
 
+datos.forEach((element) => {
+    let p = getPais(element.proyecto.pais);
+    let marker = L.marker([element.lat, element.lng], {
+        id: element.proyecto.id,
+        type: element.type,
+        img: getImg(element.proyecto.id),
+        pais: p[0].url,
+        pais_name: p[0].nombre,
+        ods: getODS(JSON.parse(element.proyecto.ods)),
+        sector: getSector(element.proyecto.sector),
+        content: element.proyecto.descripcion,
+        name: element.proyecto.titulo,
+        ciudad: element.ciudad,
+        popularidad: element.proyecto.popularidad,
+        entidad: element.proyecto.entidad,
+        poblacion: element.proyecto.poblacion,
+    }).bindPopup(element.proyecto.titulo);
 
-datos.forEach((element) => {    
-    if (element.type == "idea inovadora") {
-        let p = getPais(element.proyecto.pais) 
-        let marker = L.marker([element.lat, element.lng], {
-            id: element.proyecto.id,
-            icon: ideaMarker,
-            type: element.type,
-            img: getImg(element.proyecto.id),
-            pais: p[0].url,
-            pais_name: p[0].nombre,
-            ods: getODS(JSON.parse(element.proyecto.ods)),
-            sector : getSector(element.proyecto.sector),
-            content: element.proyecto.descripcion,
-            name: element.proyecto.titulo,
-            ciudad: element.ciudad,
-            popularidad: element.proyecto.popularidad,
-            entidad: element.proyecto.entidad,
-            poblacion: element.proyecto.poblacion,
-        }).bindPopup(element.proyecto.titulo);
-        markers_ideas_innovadoras.addLayer(marker);
-    }
     if (element.type == "buena practica") {
-        let p = getPais(element.proyecto.pais) 
-        let marker = L.marker([element.lat, element.lng], {
-            id: element.proyecto.id,
-            icon: proyectoMarker,
-            type: element.type,
-            img: getImg(element.proyecto.id),            
-            pais: p[0].url,
-            pais_name: p[0].nombre,
-            ods: getODS(JSON.parse(element.proyecto.ods)),
-            sector : getSector(element.proyecto.sector),
-            content: element.proyecto.descripcion,
-            name: element.proyecto.titulo,
-            ciudad: element.ciudad,
-            popularidad: element.proyecto.popularidad,  
-            entidad: element.proyecto.entidad,
-            poblacion: element.proyecto.poblacion,
-        }).bindPopup(element.proyecto.titulo);
-        markers_buenas_practicas.addLayer(marker);        
-    }    
+        marker.setIcon(proyectoMarker);
+    }
+
+    if (element.type == "idea inovadora") {
+        marker.setIcon(ideaMarker);
+    }
+    markadores.addLayer(marker);
 });
 
 function compartir() {
@@ -191,7 +161,8 @@ function compartir() {
     var url = window.location.href;
     var title = "Titulo de Prueba";
     var descripcion = "Descripcion de Prueba";
-    var img = "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.france24.com%2Fes%2F20190409-gatos-reconocen-nombre-ignorar-estudio&psig=AOvVaw1ZfMmwnk9mxVW6s8awape-&ust=1682896629536000&source=images&cd=vfe&ved=0CBEQjRxqFwoTCNjdktCc0P4CFQAAAAAdAAAAABAE"
+    var img =
+        "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.france24.com%2Fes%2F20190409-gatos-reconocen-nombre-ignorar-estudio&psig=AOvVaw1ZfMmwnk9mxVW6s8awape-&ust=1682896629536000&source=images&cd=vfe&ved=0CBEQjRxqFwoTCNjdktCc0P4CFQAAAAAdAAAAABAE";
 
     btn_compartir_facebook.addEventListener("click", () => {
         /*var metaTitle = document.querySelector('meta[property="og:title"]');
@@ -207,19 +178,17 @@ function compartir() {
         var facebookUrl =
             "https://www.facebook.com/sharer/sharer.php?u=" +
             encodeURIComponent(url) +
-            "&og:title="+ encodeURIComponent(title) +
-            "&og:description="+ encodeURIComponent(descripcion) +
-            "&og:image="+ encodeURIComponent(img)
-            ;
-
-        // Abrir la página de compartir en Facebook en una nueva pestaña
-        //window.open(facebookUrl, "_blank");
-        /*window.open(
+            "&og:title=" +
+            encodeURIComponent(title) +
+            "&og:description=" +
+            encodeURIComponent(descripcion) +
+            "&og:image=" +
+            encodeURIComponent(img);
+        window.open(
             facebookUrl,
-            "Compartir en Facebook",
-            "width=600,height=400"
-        );*/
-        window.open(facebookUrl, "_blank", "toolbar=yes,scrollbars=yes,resizable=yes,top=500,left=500,width=400,height=400");
+            "_blank",
+            "toolbar=yes,scrollbars=yes,resizable=yes,top=500,left=500,width=400,height=400"
+        );
     });
     btn_compartir_twitter.addEventListener("click", () => {
         // Crear la URL de compartir en Twitter
@@ -249,7 +218,7 @@ function FormLike() {
     form.addEventListener("submit", function (event) {
         event.preventDefault();
         const formData = new FormData(this);
-        let id = document.getElementById("id_value").value;            
+        let id = document.getElementById("id_value").value;
         axios
             .post("/like", formData)
             .then(function (response) {
@@ -258,10 +227,10 @@ function FormLike() {
                     id: id,
                     estado: true,
                 });
-                localStorage.setItem("like", JSON.stringify(beforelikes));                
-                span.innerHTML = parseInt(span.innerHTML)+1;
+                localStorage.setItem("like", JSON.stringify(beforelikes));
+                span.innerHTML = parseInt(span.innerHTML) + 1;
                 btn.style.color = "#ff0000";
-                span.style.color = "#fff";                 
+                span.style.color = "#fff";
             })
             .catch(function (error) {
                 console.log(error);
@@ -274,18 +243,18 @@ function recorrer_cache() {
     let id = document.getElementById("id_value").value;
     let btn = document.getElementById("btn-favorite");
     let span = document.getElementById("like");
-    const cache = JSON.parse(localStorage.getItem("like"));    
+    const cache = JSON.parse(localStorage.getItem("like"));
     for (const item of cache) {
         if (item.id == id) {
             btn.style.color = "#ff0000";
-            span.style.color = "#fff";    
-            span.innerHTML = parseInt(span.innerHTML)+1;
+            span.style.color = "#fff";
+            span.innerHTML = parseInt(span.innerHTML) + 1;
         }
     }
 }
 
 //añadimos una funciona a cada marcador
-markers_buenas_practicas.on("click", function (a) {
+/*markers_buenas_practicas.on("click", function (a) {
     var url = new URL(window.location.href);
     url.searchParams.set("id", window.btoa(a.layer.options.id));
     window.history.replaceState(null, null, url);
@@ -353,10 +322,10 @@ markers_buenas_practicas.on("click", function (a) {
     compartir();
     FormLike();
     recorrer_cache();
-});
+});*/
 
 //añadimos una funciona a cada marcador
-markers_ideas_innovadoras.on("click", function (a) {
+/*markers_ideas_innovadoras.on("click", function (a) {
     var url = new URL(window.location.href);
     url.searchParams.set("id", window.btoa(a.layer.options.id));
     window.history.replaceState(null, null, url);
@@ -426,33 +395,138 @@ markers_ideas_innovadoras.on("click", function (a) {
     compartir();
     FormLike();
     recorrer_cache();
+});*/
+
+markadores.on("click", function (a) {
+    var url = new URL(window.location.href);
+    url.searchParams.set("id", window.btoa(a.layer.options.id));
+    window.history.replaceState(null, null, url);
+    sidebar.setContent(
+        `<div class="isotope-item ideas-innovadoras sidebar-map">
+            <article class="post vertical-item content-padding with_background rounded overflow_hidden loop-color sidebar-map-item">
+                <header class="entry-header">
+                    <h1>${
+                        a.layer.options.name
+                    }</h1>                                        
+                    <div class="redes-sociales"> 
+                    <p>${
+                        a.layer.options.type
+                    }</p>                                      
+                        <ul class="wrapper">
+                            <li class="icon facebook">
+                                <span class="tooltip">Facebook</span>
+                                <span><button class="btn-facebook" id="btn-facebook"><i class="fa-brands fa-facebook-f"></i></button></span>
+                            </li>
+                            <li class="icon twitter">
+                                <span class="tooltip">Twitter</span>
+                                <span><button class="btn-twitter" id="btn-twitter"><i class="fa-brands fa-twitter"></i></button></span>
+                            </li>
+                            <li class="icon instagram">
+                                <span class="tooltip">Instagram</span>
+                                <span><button class="btn-instagram" id="btn-instagram"><i class="fa-brands fa-instagram"></i></button></span>
+                            </li>
+                        </ul>                    
+                    </div>
+                </header>
+                <div class="item-media entry-thumbnail img-type">
+                    <img src="${a.layer.options.img}" alt="">   
+                    <img class="pais" src="${a.layer.options.pais}" alt=""> 
+                    <span class="sector">${
+                        a.layer.options.sector
+                    }</span>                 
+                    <form id="formlike">                                                
+                        <input type="hidden" id="id_value" name="id" value="${window.btoa(
+                            a.layer.options.id
+                        )}">
+                        <button type="submit" id="btn-favorite" class="btn-favorite"><i class="fa-solid fa-heart"></i><span id="like">${
+                            a.layer.options.popularidad
+                        }</span></button>
+                    </form>
+                </div>
+                <div class="item-content content-type">                    
+                    <div class="entry-content">
+                        <span class="l-pais_name">${
+                            a.layer.options.pais_name
+                        }</span>
+                        <span class="l-ciudad">${a.layer.options.ciudad}</span>
+                        <p>${a.layer.options.content}</p>
+                        <p>Poblacion Beneficiada: <span class="poblacion">${
+                            a.layer.options.poblacion
+                        }</span></p>
+                        <div class="ods">
+                        ${a.layer.options.ods["nombre"]}
+                        </div>
+                        <div>
+                            <h3>Entidades que patrocinan el proyecto</h3>
+                            <p class="entidad">${a.layer.options.entidad}</p>
+                        </div>                                                                          
+                        <!--incio de markadores-->
+                        <div class="pswp-gallery pswp-gallery--single-column" id="gallery--getting-started">
+                            <a href="${a.layer.options.img}" 
+                                data-pswp-width="1669" 
+                                data-pswp-height="2500" 
+                                target="_blank">
+                                <img src="${a.layer.options.img}" alt="" />
+                            </a>                            
+                        </div>
+                        <!--fin de markadores-->
+                    </div>   
+                </button>
+                </div>                
+            </article>
+        </div>`
+    );
+    sidebar.show();
+    if (a.layer.options.type == "idea inovadora") {
+        let ideas_innovadoras = document.getElementById("sidebar");
+        ideas_innovadoras.style.background = "#FDC830";
+    }
+
+    if (a.layer.options.type == "buena practica") {
+        let buenas_practicas = document.getElementById("sidebar");
+        buenas_practicas.style.background = "#00c6ff";
+    }
+    compartir();
+    FormLike();
+    recorrer_cache();
 });
 
-markers_buenas_practicas.on("mouseover", function (e) {
+/*============== libreria para las imagenes ============= */
+/*const lightbox = new PhotoSwipeLightbox({
+  gallery: '#gallery--getting-started',
+  children: 'a',
+  pswpModule: () => import('photoswipe')
+});
+lightbox.init();*/
+const options = {
+  gallery: '#gallery--individual a',
+  pswpModule: () => import('/photoswipe/photoswipe.esm.js')
+};
+const lightbox = new PhotoSwipeLightbox(options);
+lightbox.init();
+
+markadores.on("mouseover", function (e) {
     this.openPopup();
 });
 
-markers_ideas_innovadoras.on("mouseover", function (e) {
-    this.openPopup();
-});
-
-markers_buenas_practicas.on("mouseover", function (e) {
+markadores.on("mouseover", function (e) {
     this.openTooltip();
 });
 
-markers_ideas_innovadoras.on("mouseover", function (e) {
-    this.openTooltip();
-});
+/*var markers_ideas_innovadoras = markadores.filters(function(marker){
+    return marker.options.type === "idea inovadora"
+})
 
-var layerGroupTotal = L.layerGroup([
-    markers_buenas_practicas,
-    markers_ideas_innovadoras,
-]);
+var markers_buenas_practicas = markadores.filters(function(marker){
+    return marker.options.type === "buena practica"
+})*/
+
+var layerGroupTotal = L.layerGroup([markadores]);
 
 var OverLayMaps = {
-    '<i class="fa-solid fa-lightbulb icon-title"></i> Ideas Innovadoras': markers_ideas_innovadoras,
-    '<i class="fa-solid fa-trophy"></i> Buenas Practicas': markers_buenas_practicas,
-    'Ambos': layerGroupTotal,
+    /*'<i class="fa-solid fa-lightbulb icon-title"></i> Ideas Innovadoras': markers_ideas_innovadoras,
+    '<i class="fa-solid fa-trophy"></i> Buenas Practicas': markers_buenas_practicas,*/
+    Ambos: layerGroupTotal,
 };
 L.control.layers(OverLayMaps).addTo(map);
 
@@ -488,13 +562,13 @@ map.addControl(searchControl);
 
 //una vez encontrado el buscador realizamos un zoom en el marcador
 searchControl.on("search:locationfound", function (e) {
-    console.log(e)
-    map.setView(e.latlng, 5); // Zoom a la posición del marcador encontrado con un nivel de zoom de 16    
+    console.log(e);
+    map.setView(e.latlng, 5); // Zoom a la posición del marcador encontrado con un nivel de zoom de 16
 });
 
 // Agregar un controlador de eventos para el evento "search:cancel"
 searchControl.on("search:cancel", function (e) {
-    console.log(searchControl.marker)
+    console.log(searchControl.marker);
 });
 
 //posicion de los botones de zoom del mapa
@@ -517,13 +591,19 @@ function cargarMapa() {
 function localizarMarkerPorId(id) {
     // Buscar el marker correspondiente al ID
     let marker = null;
-    markers_buenas_practicas.eachLayer(function (layer) {
+    /*markers_buenas_practicas.eachLayer(function (layer) {
         if (layer.options.id == window.atob(id)) {
             marker = layer;
         }
-    });
+    });*/
 
-    markers_ideas_innovadoras.eachLayer(function (layer) {
+    /*markers_ideas_innovadoras.eachLayer(function (layer) {
+        if (layer.options.id == window.atob(id)) {
+            marker = layer;
+        }
+    });*/
+
+    markadores.eachLayer(function (layer) {
         if (layer.options.id == window.atob(id)) {
             marker = layer;
         }
