@@ -21,10 +21,10 @@ import "leaflet-search/dist/leaflet-search.src.css";
 import "../css/leaflet.css";
 import axios from "axios";
 
-
-//import PhotoSwipeLightbox from 'photoswipe/lightbox';
-import PhotoSwipeLightbox from '/photoswipe/photoswipe-lightbox.esm.js';
-import 'photoswipe/style.css';
+// import function to register Swiper custom elements
+import { register } from 'swiper/element/bundle';
+// register Swiper custom elements
+register();
 
 //crea una instancia de tu mapa de leaflet
 const map = L.map("mapid", {
@@ -76,10 +76,38 @@ function getImg(id) {
     let url = "#";
     documentos.forEach((element) => {
         if (element.proyecto_id == id && element.tipo == "imagenes") {
-            url = "documento/" + element.id;
+            url = "storage/imagenes/"+element.name;
         }
     });
     return url;
+}
+/*================= funcion que retorna una array de imagenes =========== */
+function getImagenes(id){
+    let imagenes = [];
+    let url = "#"
+    documentos.forEach((element) => {
+        if (element.proyecto_id == id && element.tipo == "imagenes") {
+            url = "storage/imagenes/" + element.name;
+            imagenes.push(url)
+        }
+    });
+    return imagenes
+}
+/*================= funcion que retorna un array de documentos ========== */
+
+function getDocumentos(id){
+    let documentos_array = [];
+    let url = "#"
+    documentos.forEach((element) => {
+        if (element.proyecto_id == id && element.tipo == "documentos") {
+            url = element.id;
+            documentos_array.push({
+                url: url,
+                nombre: element.name_original
+            })
+        }
+    });
+    return documentos_array
 }
 
 /*================ funcion para retornar la bandera de un pais =============== */
@@ -140,6 +168,8 @@ datos.forEach((element) => {
         popularidad: element.proyecto.popularidad,
         entidad: element.proyecto.entidad,
         poblacion: element.proyecto.poblacion,
+        imagenes: getImagenes(element.proyecto.id),
+        pdfs: getDocumentos(element.proyecto.id)
     }).bindPopup(element.proyecto.titulo);
 
     if (element.type == "buena practica") {
@@ -168,7 +198,6 @@ function compartir() {
         /*var metaTitle = document.querySelector('meta[property="og:title"]');
         metaTitle.setAttribute("content", "buena practica");
 
-        var metaImage = document.querySelector('meta[property="og:image"]');
         metaImage.setAttribute(
             "content",
             "https://empresa.org.ar/wp-content/uploads/2019/01/gestion-de-proyectos-1.jpeg"
@@ -253,149 +282,6 @@ function recorrer_cache() {
     }
 }
 
-//añadimos una funciona a cada marcador
-/*markers_buenas_practicas.on("click", function (a) {
-    var url = new URL(window.location.href);
-    url.searchParams.set("id", window.btoa(a.layer.options.id));
-    window.history.replaceState(null, null, url);
-    sidebar.setContent(
-        `<div class="isotope-item buenas-practicas sidebar-map">
-            <article class="post vertical-item content-padding with_background rounded overflow_hidden loop-color sidebar-map-item">
-                <header class="entry-header">
-                    <h1>${a.layer.options.name}</h1>
-                    <p class="icon-type"><i class="fa-solid fa-trophy"></i>
-                    ${a.layer.options.type}</p>
-                    <div class="redes-sociales">  
-                        <p>Comparte en tus redes sociales</p>                                      
-                        <ul class="wrapper">
-                            <li class="icon facebook">
-                                <span class="tooltip">Facebook</span>
-                                <span><button class="btn-facebook" id="btn-facebook"><i class="fa-brands fa-facebook-f"></i></button></span>
-                            </li>
-                            <li class="icon twitter">
-                                <span class="tooltip">Twitter</span>
-                                <span><button class="btn-twitter" id="btn-twitter"><i class="fa-brands fa-twitter"></i></button></span>
-                            </li>
-                            <li class="icon instagram">
-                                <span class="tooltip">Instagram</span>
-                                <span><button class="btn-instagram" id="btn-instagram"><i class="fa-brands fa-instagram"></i></button></span>
-                            </li>
-                        </ul>                    
-                    </div>
-                </header>
-                <div class="item-media entry-thumbnail img-type">
-                    <img src="${a.layer.options.img}" alt=""> 
-                    <img class="pais" src="${a.layer.options.pais}" alt="">
-                    <span class="sector">${a.layer.options.sector}</span>
-                    <form id="formlike">
-                        <input type="hidden" id="id_value" name="id" value="${window.btoa(
-                            a.layer.options.id
-                        )}">
-                        <button type="submit" id="btn-favorite" class="btn-favorite"><i class="fa-solid fa-heart"></i><span id="like">${
-                            a.layer.options.popularidad
-                        }</span></button>
-                    </form>
-                </div>
-                <div class="item-content content-type">                
-                    <div class="entry-content">
-                        <span class="l-pais_name">${a.layer.options.pais_name}</span>
-                        <span class="l-ciudad">${a.layer.options.ciudad}</span>
-                        <p>${a.layer.options.content}</p>
-                        <p>Poblacion Beneficiada: <span class="poblacion">${a.layer.options.poblacion}</span></p>
-                        <div class="ods">
-                        ${
-                            a.layer.options.ods['nombre']
-                        }
-                        </div>
-                        <div>
-                            <h3>Entidades que patrocinan el proyecto</h3>
-                            <p class="entidad">${a.layer.options.entidad}</p>
-                        </div>  
-                    </div>                                 
-                </div>                
-            </article>
-        </div>`
-    );
-    sidebar.show();
-    let buenas_practicas = document.getElementById("sidebar");
-    buenas_practicas.style.background = "#00c6ff";
-    compartir();
-    FormLike();
-    recorrer_cache();
-});*/
-
-//añadimos una funciona a cada marcador
-/*markers_ideas_innovadoras.on("click", function (a) {
-    var url = new URL(window.location.href);
-    url.searchParams.set("id", window.btoa(a.layer.options.id));
-    window.history.replaceState(null, null, url);
-    sidebar.setContent(
-        `<div class="isotope-item ideas-innovadoras sidebar-map">
-            <article class="post vertical-item content-padding with_background rounded overflow_hidden loop-color sidebar-map-item">
-                <header class="entry-header">
-                    <h1>${a.layer.options.name}</h1>                    
-                    <p class="icon-type"><i class="fa-solid fa-lightbulb icon-title"></i>${
-                        a.layer.options.type
-                    }</p>
-                    <div class="redes-sociales"> 
-                    <p>Comparte en tus redes sociales</p>                                      
-                        <ul class="wrapper">
-                            <li class="icon facebook">
-                                <span class="tooltip">Facebook</span>
-                                <span><button class="btn-facebook" id="btn-facebook"><i class="fa-brands fa-facebook-f"></i></button></span>
-                            </li>
-                            <li class="icon twitter">
-                                <span class="tooltip">Twitter</span>
-                                <span><button class="btn-twitter" id="btn-twitter"><i class="fa-brands fa-twitter"></i></button></span>
-                            </li>
-                            <li class="icon instagram">
-                                <span class="tooltip">Instagram</span>
-                                <span><button class="btn-instagram" id="btn-instagram"><i class="fa-brands fa-instagram"></i></button></span>
-                            </li>
-                        </ul>                    
-                    </div>
-                </header>
-                <div class="item-media entry-thumbnail img-type">
-                    <img src="${a.layer.options.img}" alt="">   
-                    <img class="pais" src="${a.layer.options.pais}" alt=""> 
-                    <span class="sector">${a.layer.options.sector}</span>                 
-                    <form id="formlike">                                                
-                        <input type="hidden" id="id_value" name="id" value="${window.btoa(
-                            a.layer.options.id
-                        )}">
-                        <button type="submit" id="btn-favorite" class="btn-favorite"><i class="fa-solid fa-heart"></i><span id="like">${
-                            a.layer.options.popularidad
-                        }</span></button>
-                    </form>
-                </div>
-                <div class="item-content content-type">                    
-                    <div class="entry-content">
-                        <span class="l-pais_name">${a.layer.options.pais_name}</span>
-                        <span class="l-ciudad">${a.layer.options.ciudad}</span>
-                        <p>${a.layer.options.content}</p>
-                        <p>Poblacion Beneficiada: <span class="poblacion">${a.layer.options.poblacion}</span></p>
-                        <div class="ods">
-                        ${
-                            a.layer.options.ods['nombre']
-                        }
-                        </div>
-                        <div>
-                            <h3>Entidades que patrocinan el proyecto</h3>
-                            <p class="entidad">${a.layer.options.entidad}</p>
-                        </div>            
-                    </div>   
-                </button>
-                </div>                
-            </article>
-        </div>`
-    );
-    sidebar.show();
-    let ideas_innovadoras = document.getElementById("sidebar");
-    ideas_innovadoras.style.background = "#FDC830";
-    compartir();
-    FormLike();
-    recorrer_cache();
-});*/
 
 markadores.on("click", function (a) {
     var url = new URL(window.location.href);
@@ -449,27 +335,52 @@ markadores.on("click", function (a) {
                             a.layer.options.pais_name
                         }</span>
                         <span class="l-ciudad">${a.layer.options.ciudad}</span>
+                        <span class="l-poblacion">${a.layer.options.poblacion}</span>
                         <p>${a.layer.options.content}</p>
-                        <p>Poblacion Beneficiada: <span class="poblacion">${
-                            a.layer.options.poblacion
-                        }</span></p>
+
+                        <p class="poblacion">Presupuesto: 
+                            <span class="campo">150000 Bs.</span>                        
+                        </p>
+
                         <div class="ods">
                         ${a.layer.options.ods["nombre"]}
+                        </div>                                                                         
+                        <!--incio de markadores--> 
+                        <div class="imagenes-content">
+                        <h2>Imagenes del proyecto</h2>
+                        <swiper-container class="mySwiper" pagination="true" pagination-clickable="true" navigation="true" space-between="30" loop="true">
+                        ${a.layer.options.imagenes.map(element => `
+                        <swiper-slide>
+                          <a href="${element}" target="_blank">
+                            <img src="${element}" alt=""> 
+                          </a>
+                        </swiper-slide>
+                      `).join('')}                            
+                        </swiper-container>
+                        </div>                        
+                        <!--fin de markadores-->                   
+                        <div class="documentos-content">
+                            <h2>Documentos del proyecto</h2>
+                            ${a.layer.options.pdfs.map(element => `                                                                               
+                                <p>#<a href="documento/${element.url}">${element.nombre}</a></p>
+                            `).join('')}  
                         </div>
-                        <div>
-                            <h3>Entidades que patrocinan el proyecto</h3>
-                            <p class="entidad">${a.layer.options.entidad}</p>
-                        </div>                                                                          
-                        <!--incio de markadores-->
-                        <div class="pswp-gallery pswp-gallery--single-column" id="gallery--getting-started">
-                            <a href="${a.layer.options.img}" 
-                                data-pswp-width="1669" 
-                                data-pswp-height="2500" 
-                                target="_blank">
-                                <img src="${a.layer.options.img}" alt="" />
-                            </a>                            
+                        <div class="entidades-content">
+                            <h2>Entidades que patrocinan el proyecto</h2> 
+                            <ul>
+                                <li><p>#<span>${a.layer.options.entidad}</span></p></li>
+                            </ul>                            
+                        </div> 
+                        <div class="ods-content">
+                        <h2>Objetivos de Desarrollo Sostenible</h2>                    
+                        <swiper-container class="swiper-ods" slides-per-view="3">
+                            ${a.layer.options.ods.map(element => `
+                                    <swiper-slide>                                                                                                                                                                                           
+                                        <img class="icono_url" src="${element.icono_url}"/>                              
+                                    </swiper-slide>
+                            `).join('')}  
+                        </swiper-container>
                         </div>
-                        <!--fin de markadores-->
                     </div>   
                 </button>
                 </div>                
@@ -491,19 +402,7 @@ markadores.on("click", function (a) {
     recorrer_cache();
 });
 
-/*============== libreria para las imagenes ============= */
-/*const lightbox = new PhotoSwipeLightbox({
-  gallery: '#gallery--getting-started',
-  children: 'a',
-  pswpModule: () => import('photoswipe')
-});
-lightbox.init();*/
-const options = {
-  gallery: '#gallery--individual a',
-  pswpModule: () => import('/photoswipe/photoswipe.esm.js')
-};
-const lightbox = new PhotoSwipeLightbox(options);
-lightbox.init();
+/*============== libreria para las imagenes ============= */ 
 
 markadores.on("mouseover", function (e) {
     this.openPopup();
@@ -521,11 +420,36 @@ var markers_buenas_practicas = markadores.filters(function(marker){
     return marker.options.type === "buena practica"
 })*/
 
+//creacion del grupo de marcadores para ideas innovadoras
+var markers_ideas_innovadoras = L.markerClusterGroup({
+    spiderfyOnMaxZoom: false,
+    showCoverageOnHover: false,
+    zoomToBoundsOnClick: true,
+});
+map.addLayer(markers_ideas_innovadoras);
+
+//creacion del grupo de marcadores para buenas practicas
+var markers_buenas_practicas = L.markerClusterGroup({
+    spiderfyOnMaxZoom: false,
+    showCoverageOnHover: false,
+    zoomToBoundsOnClick: true,
+});
+map.addLayer(markers_buenas_practicas);
+
 var layerGroupTotal = L.layerGroup([markadores]);
 
+markadores.eachLayer(function(marker){
+    if(marker.options.type === 'idea inovadora'){
+        markers_ideas_innovadoras.addLayer(marker)
+    }
+    if(marker.options.type === 'buena practica'){
+        markers_ideas_innovadoras.addLayer(marker)
+    }
+});
+
 var OverLayMaps = {
-    /*'<i class="fa-solid fa-lightbulb icon-title"></i> Ideas Innovadoras': markers_ideas_innovadoras,
-    '<i class="fa-solid fa-trophy"></i> Buenas Practicas': markers_buenas_practicas,*/
+    '<i class="fa-solid fa-lightbulb icon-title"></i> Ideas Innovadoras': markers_ideas_innovadoras,
+    '<i class="fa-solid fa-trophy"></i> Buenas Practicas': markers_buenas_practicas,
     Ambos: layerGroupTotal,
 };
 L.control.layers(OverLayMaps).addTo(map);

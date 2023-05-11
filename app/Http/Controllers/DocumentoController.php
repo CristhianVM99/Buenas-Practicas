@@ -35,7 +35,7 @@ class DocumentoController extends Controller
     {
         $url = FileService::getUrl( $documento->ruta );
         return $url? response()->file( $url ): null;
-    }
+    }    
 
     public function delete(Documento $documento)
     {
