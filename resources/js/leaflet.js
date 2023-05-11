@@ -71,6 +71,23 @@ var markadores = L.markerClusterGroup({
 });
 map.addLayer(markadores);
 
+//creacion del grupo de marcadores para ideas innovadoras
+var markers_ideas_innovadoras = L.markerClusterGroup({
+    spiderfyOnMaxZoom: false,
+    showCoverageOnHover: false,
+    zoomToBoundsOnClick: true,
+});
+map.addLayer(markers_ideas_innovadoras);
+
+//creacion del grupo de marcadores para buenas practicas
+var markers_buenas_practicas = L.markerClusterGroup({
+    spiderfyOnMaxZoom: false,
+    showCoverageOnHover: false,
+    zoomToBoundsOnClick: true,
+});
+map.addLayer(markers_buenas_practicas);
+
+
 /*=============== funcion que retorna la url de una imagen ============ */
 function getImg(id) {
     let url = "#";
@@ -152,6 +169,19 @@ function getSector(id) {
     return sector;
 }
 
+
+var layerGroupTotal = L.layerGroup([markadores]);
+
+var layerGroupTotal_ideas_innovadoras = L.layerGroup([markers_ideas_innovadoras])
+var layerGroupTotal_buenas_practicas = L.layerGroup([markers_buenas_practicas])
+
+var OverLayMaps = {
+    '<i class="fa-solid fa-lightbulb icon-title"></i> Ideas Innovadoras': layerGroupTotal_ideas_innovadoras,
+    '<i class="fa-solid fa-trophy"></i> Buenas Practicas': layerGroupTotal_buenas_practicas,
+    'Ambos': layerGroupTotal,
+};
+L.control.layers(OverLayMaps).addTo(map);
+
 datos.forEach((element) => {
     let p = getPais(element.proyecto.pais);
     let marker = L.marker([element.lat, element.lng], {
@@ -174,10 +204,12 @@ datos.forEach((element) => {
 
     if (element.type == "buena practica") {
         marker.setIcon(proyectoMarker);
+        markers_buenas_practicas.addLayer(marker);
     }
 
     if (element.type == "idea inovadora") {
         marker.setIcon(ideaMarker);
+        markers_ideas_innovadoras.addLayer(marker);
     }
     markadores.addLayer(marker);
 });
@@ -282,8 +314,7 @@ function recorrer_cache() {
     }
 }
 
-
-markadores.on("click", function (a) {
+function principal(a) {
     var url = new URL(window.location.href);
     url.searchParams.set("id", window.btoa(a.layer.options.id));
     window.history.replaceState(null, null, url);
@@ -293,11 +324,11 @@ markadores.on("click", function (a) {
                 <header class="entry-header">
                     <h1>${
                         a.layer.options.name
-                    }</h1>                                        
-                    <div class="redes-sociales"> 
+                    }</h1>
+                    <div class="redes-sociales">
                     <p>${
                         a.layer.options.type
-                    }</p>                                      
+                    }</p>
                         <ul class="wrapper">
                             <li class="icon facebook">
                                 <span class="tooltip">Facebook</span>
@@ -311,16 +342,16 @@ markadores.on("click", function (a) {
                                 <span class="tooltip">Instagram</span>
                                 <span><button class="btn-instagram" id="btn-instagram"><i class="fa-brands fa-instagram"></i></button></span>
                             </li>
-                        </ul>                    
+                        </ul>
                     </div>
                 </header>
                 <div class="item-media entry-thumbnail img-type">
-                    <img src="${a.layer.options.img}" alt="">   
-                    <img class="pais" src="${a.layer.options.pais}" alt=""> 
+                    <img src="${a.layer.options.img}" alt="">
+                    <img class="pais" src="${a.layer.options.pais}" alt="">
                     <span class="sector">${
                         a.layer.options.sector
-                    }</span>                 
-                    <form id="formlike">                                                
+                    }</span>
+                    <form id="formlike">
                         <input type="hidden" id="id_value" name="id" value="${window.btoa(
                             a.layer.options.id
                         )}">
@@ -329,7 +360,7 @@ markadores.on("click", function (a) {
                         }</span></button>
                     </form>
                 </div>
-                <div class="item-content content-type">                    
+                <div class="item-content content-type">
                     <div class="entry-content">
                         <span class="l-pais_name">${
                             a.layer.options.pais_name
@@ -338,52 +369,52 @@ markadores.on("click", function (a) {
                         <span class="l-poblacion">${a.layer.options.poblacion}</span>
                         <p>${a.layer.options.content}</p>
 
-                        <p class="poblacion">Presupuesto: 
-                            <span class="campo">150000 Bs.</span>                        
+                        <p class="poblacion">Presupuesto:
+                            <span class="campo">150000 Bs.</span>
                         </p>
 
                         <div class="ods">
                         ${a.layer.options.ods["nombre"]}
-                        </div>                                                                         
-                        <!--incio de markadores--> 
+                        </div>
+                        <!--incio de markadores-->
                         <div class="imagenes-content">
                         <h2>Imagenes del proyecto</h2>
                         <swiper-container class="mySwiper" pagination="true" pagination-clickable="true" navigation="true" space-between="30" loop="true">
                         ${a.layer.options.imagenes.map(element => `
                         <swiper-slide>
                           <a href="${element}" target="_blank">
-                            <img src="${element}" alt=""> 
+                            <img src="${element}" alt="">
                           </a>
                         </swiper-slide>
-                      `).join('')}                            
+                      `).join('')}
                         </swiper-container>
-                        </div>                        
-                        <!--fin de markadores-->                   
+                        </div>
+                        <!--fin de markadores-->
                         <div class="documentos-content">
                             <h2>Documentos del proyecto</h2>
-                            ${a.layer.options.pdfs.map(element => `                                                                               
-                                <p>#<a href="documento/${element.url}">${element.nombre}</a></p>
-                            `).join('')}  
+                            ${a.layer.options.pdfs.map(element => `
+                                <p>#<a href="documento/${element.url}" target="_blank">${element.nombre}</a></p>
+                            `).join('')}
                         </div>
                         <div class="entidades-content">
-                            <h2>Entidades que patrocinan el proyecto</h2> 
+                            <h2>Entidades que patrocinan el proyecto</h2>
                             <ul>
                                 <li><p>#<span>${a.layer.options.entidad}</span></p></li>
-                            </ul>                            
-                        </div> 
+                            </ul>
+                        </div>
                         <div class="ods-content">
-                        <h2>Objetivos de Desarrollo Sostenible</h2>                    
+                        <h2>Objetivos de Desarrollo Sostenible</h2>
                         <swiper-container class="swiper-ods" slides-per-view="3">
                             ${a.layer.options.ods.map(element => `
-                                    <swiper-slide>                                                                                                                                                                                           
-                                        <img class="icono_url" src="${element.icono_url}"/>                              
+                                    <swiper-slide>
+                                        <img class="icono_url" src="${element.icono_url}"/>
                                     </swiper-slide>
-                            `).join('')}  
+                            `).join('')}
                         </swiper-container>
                         </div>
-                    </div>   
+                    </div>
                 </button>
-                </div>                
+                </div>
             </article>
         </div>`
     );
@@ -400,9 +431,13 @@ markadores.on("click", function (a) {
     compartir();
     FormLike();
     recorrer_cache();
-});
+}
 
-/*============== libreria para las imagenes ============= */ 
+markadores.on("click", principal);
+markers_buenas_practicas.on("click", principal);
+markers_ideas_innovadoras.on("click", principal);
+
+/*============== libreria para las imagenes ============= */
 
 markadores.on("mouseover", function (e) {
     this.openPopup();
@@ -419,40 +454,6 @@ markadores.on("mouseover", function (e) {
 var markers_buenas_practicas = markadores.filters(function(marker){
     return marker.options.type === "buena practica"
 })*/
-
-//creacion del grupo de marcadores para ideas innovadoras
-var markers_ideas_innovadoras = L.markerClusterGroup({
-    spiderfyOnMaxZoom: false,
-    showCoverageOnHover: false,
-    zoomToBoundsOnClick: true,
-});
-map.addLayer(markers_ideas_innovadoras);
-
-//creacion del grupo de marcadores para buenas practicas
-var markers_buenas_practicas = L.markerClusterGroup({
-    spiderfyOnMaxZoom: false,
-    showCoverageOnHover: false,
-    zoomToBoundsOnClick: true,
-});
-map.addLayer(markers_buenas_practicas);
-
-var layerGroupTotal = L.layerGroup([markadores]);
-
-markadores.eachLayer(function(marker){
-    if(marker.options.type === 'idea inovadora'){
-        markers_ideas_innovadoras.addLayer(marker)
-    }
-    if(marker.options.type === 'buena practica'){
-        markers_ideas_innovadoras.addLayer(marker)
-    }
-});
-
-var OverLayMaps = {
-    '<i class="fa-solid fa-lightbulb icon-title"></i> Ideas Innovadoras': markers_ideas_innovadoras,
-    '<i class="fa-solid fa-trophy"></i> Buenas Practicas': markers_buenas_practicas,
-    Ambos: layerGroupTotal,
-};
-L.control.layers(OverLayMaps).addTo(map);
 
 //creacion de un buscador
 var searchControl = new L.Control.Search({
