@@ -1,7 +1,7 @@
 // LIBRERIAS
 /*================== Librerias de Leaflet ================ */
 import "leaflet/dist/leaflet.css";
-import L, { DomUtil, icon, marker } from "leaflet";
+import L, { DomUtil, icon, layerGroup, marker } from "leaflet";
 /*================== Librerias parar el Cluster ================ */
 import "leaflet.markercluster/dist/MarkerCluster.css";
 import "leaflet.markercluster/dist/MarkerCluster.Default.css";
@@ -112,6 +112,8 @@ div.innerHTML = `<div class="radio-input">
 </label>
 
 </div>`
+var mapContainer = map.getContainer();
+mapContainer.appendChild(div);
 
 //FUNCIONES PARA LOS MARKADORES
 /*=============== funcion que retorna la url de una imagen ============ */
@@ -408,11 +410,7 @@ function principal(a) {
 
                         <p class="poblacion">Presupuesto:
                             <span class="campo">150000 Bs.</span>
-                        </p>
-
-                        <div class="ods">
-                        ${a.layer.options.ods["nombre"]}
-                        </div>
+                        </p>                        
                         <!--incio de markadores-->
                         <div class="imagenes-content">
                         <h2>Imagenes del proyecto</h2>
@@ -441,7 +439,7 @@ function principal(a) {
                         </div>
                         <div class="ods-content">
                         <h2>Objetivos de Desarrollo Sostenible</h2>
-                        <swiper-container class="swiper-ods" slides-per-view="3">
+                        <swiper-container class="swiper-ods" slides-per-view="3" navigation="true">
                             ${a.layer.options.ods.map(element => `
                                     <swiper-slide>
                                         <img class="icono_url" src="${element.icono_url}"/>
@@ -483,7 +481,7 @@ markadores.on("mouseover", function (e) {
 
 //creacion de un buscador
 var searchControl = new L.Control.Search({
-    layer: layerGroupTotal, // Capa en la que se realizará la búsqueda
+    layer: markadores, // Capa en la que se realizará la búsqueda
     propertyName: "name",
     textPlaceholder: "Buscar ...",   
 });
@@ -529,8 +527,6 @@ function localizarMarkerPorId(id) {
 }
 
 /*================================== */
-var mapContainer = map.getContainer();
-mapContainer.appendChild(div);
 map.addControl(sidebar);
 map.addLayer(markadores);
 map.addControl(searchControl);
