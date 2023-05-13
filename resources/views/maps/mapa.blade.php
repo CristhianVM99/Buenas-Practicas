@@ -5,7 +5,7 @@
 
     </style>
 
-    <div id="mapid" class="margin-bottom-20"></div>
+    <div id="mapid" class="margin-bottom-20"></div>    
     <div id="sidebar">
         <h1>leaflet-sidebar</h1>
     </div>

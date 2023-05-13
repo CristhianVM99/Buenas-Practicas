@@ -1,58 +1,61 @@
+// LIBRERIAS
+/*================== Librerias de Leaflet ================ */
 import "leaflet/dist/leaflet.css";
 import L, { DomUtil, icon, marker } from "leaflet";
-
-import "leaflet.markercluster/dist/leaflet.markercluster-src";
+/*================== Librerias parar el Cluster ================ */
 import "leaflet.markercluster/dist/MarkerCluster.css";
 import "leaflet.markercluster/dist/MarkerCluster.Default.css";
 import "leaflet.markercluster/dist/leaflet.markercluster";
-
+/*================== Librerias para un Boton ================ */
 import "leaflet-easybutton/src/easy-button.css";
 import "leaflet-easybutton/src/easy-button.js";
-
+/*================== Librerias para el Sidebar ================ */
 import "leaflet-sidebar/src/L.Control.Sidebar.css";
 import "leaflet-sidebar/src/L.Control.Sidebar.js";
-
+/*================== Librerias para los Iconos ================ */
 import "leaflet-extra-markers/dist/css/leaflet.extra-markers.min.css";
 import "leaflet-extra-markers/dist/js/leaflet.extra-markers.js";
-
+/*================== Librerias para el Buscador o Search ================ */
 import "leaflet-search/dist/leaflet-search.src";
 import "leaflet-search/dist/leaflet-search.src.css";
-
+/*================== Estilos CSS para Leaflet ================ */
 import "../css/leaflet.css";
+/*================== Libreria Axios ================ */
 import axios from "axios";
-
-// import function to register Swiper custom elements
+/*================== Librerias para Swiper ================ */
 import { register } from 'swiper/element/bundle';
-// register Swiper custom elements
 register();
 
-//crea una instancia de tu mapa de leaflet
+//CREACION DE LA INSTANCIA
+/*================== Creamos la Instancia para LEAFLET MAP ================ */
 const map = L.map("mapid", {
     center: [-17.9659, -67.1097],
     zoom: 7,
 });
-
 L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
     attribution:
         'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>',
     maxZoom: 18,
 }).addTo(map);
 
-//adicionamos el sidebar al mapa
+/*================== funciones de MAP ================ */
+map.on("click", function () {
+    sidebar.hide();
+});
+/*================== FIN DE LEAFLET MAP ================ */
+
+//CREACION DE LOS COMPONENTES
+/*================== Creacion del Sidebar ================ */
 var sidebar = L.control.sidebar("sidebar", {
     position: "left",
 });
-map.addControl(sidebar);
-
-//creamos el marker icon - idea
+/*================== Creacion de los Iconos y los Marcadores ================ */
 var ideaMarker = L.ExtraMarkers.icon({
     icon: "fa-lightbulb",
     markerColor: "yellow",
     shape: "circle",
     prefix: "fa-solid",
 });
-
-//creamos el marker icon - proyecto
 var proyectoMarker = L.ExtraMarkers.icon({
     icon: "fa-trophy",
     markerColor: "blue",
@@ -60,34 +63,57 @@ var proyectoMarker = L.ExtraMarkers.icon({
     prefix: "fa-solid",
 });
 
-map.on("click", function () {
-    sidebar.hide();
-});
-
 var markadores = L.markerClusterGroup({
     spiderfyOnMaxZoom: false,
     showCoverageOnHover: false,
     zoomToBoundsOnClick: true,
 });
-map.addLayer(markadores);
 
-//creacion del grupo de marcadores para ideas innovadoras
 var markers_ideas_innovadoras = L.markerClusterGroup({
     spiderfyOnMaxZoom: false,
     showCoverageOnHover: false,
     zoomToBoundsOnClick: true,
 });
-map.addLayer(markers_ideas_innovadoras);
 
-//creacion del grupo de marcadores para buenas practicas
 var markers_buenas_practicas = L.markerClusterGroup({
     spiderfyOnMaxZoom: false,
     showCoverageOnHover: false,
     zoomToBoundsOnClick: true,
 });
-map.addLayer(markers_buenas_practicas);
 
+/*================== FIN DE LEAFLET MAP ================ */
 
+/*=============== adicionamos un elemento checkbox al MAP ================ */
+var div = L.DomUtil.create('div', 'leaflet-control-chekbox');
+
+div.innerHTML = `<div class="radio-input">
+<input checked="" value="color-1" name="color" id="color-1" type="radio">
+<label for="color-1">
+  <p class="texto-lf">Todos</p>
+  <span>
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><g stroke-width="0" id="SVGRepo_bgCarrier"></g><g stroke-linejoin="round" stroke-linecap="round" id="SVGRepo_tracerCarrier"></g><g id="SVGRepo_iconCarrier"> <g id="Interface / Check"> <path stroke-linejoin="round" stroke-linecap="round" stroke-width="2" stroke="#ffffff" d="M6 12L10.2426 16.2426L18.727 7.75732" id="Vector"></path> </g> </g></svg>
+  </span>
+</label>
+
+<input value="color-2" name="color" id="color-2" type="radio">
+<label for="color-2">
+<p class="texto-lf">Buenas Practicas</p>
+  <span>
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><g stroke-width="0" id="SVGRepo_bgCarrier"></g><g stroke-linejoin="round" stroke-linecap="round" id="SVGRepo_tracerCarrier"></g><g id="SVGRepo_iconCarrier"> <g id="Interface / Check"> <path stroke-linejoin="round" stroke-linecap="round" stroke-width="2" stroke="#ffffff" d="M6 12L10.2426 16.2426L18.727 7.75732" id="Vector"></path> </g> </g></svg>
+  </span>
+</label>
+
+<input value="color-3" name="color" id="color-3" type="radio">
+<label for="color-3">
+<p class="texto-lf">Ideas Inovadoras</p>
+  <span>
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><g stroke-width="0" id="SVGRepo_bgCarrier"></g><g stroke-linejoin="round" stroke-linecap="round" id="SVGRepo_tracerCarrier"></g><g id="SVGRepo_iconCarrier"> <g id="Interface / Check"> <path stroke-linejoin="round" stroke-linecap="round" stroke-width="2" stroke="#ffffff" d="M6 12L10.2426 16.2426L18.727 7.75732" id="Vector"></path> </g> </g></svg>
+  </span>
+</label>
+
+</div>`
+
+//FUNCIONES PARA LOS MARKADORES
 /*=============== funcion que retorna la url de una imagen ============ */
 function getImg(id) {
     let url = "#";
@@ -111,7 +137,6 @@ function getImagenes(id){
     return imagenes
 }
 /*================= funcion que retorna un array de documentos ========== */
-
 function getDocumentos(id){
     let documentos_array = [];
     let url = "#"
@@ -126,7 +151,6 @@ function getDocumentos(id){
     });
     return documentos_array
 }
-
 /*================ funcion para retornar la bandera de un pais =============== */
 function getPais(pais) {
     let datos = [];
@@ -140,7 +164,6 @@ function getPais(pais) {
     });
     return datos;
 }
-
 /*=============== funcion para retornar los ODS de un proyecto =============== */
 
 function getODS(cadena) {
@@ -157,7 +180,6 @@ function getODS(cadena) {
     });
     return cate;
 }
-
 /*============= funcion para retornar el sector ====================  */
 function getSector(id) {
     let sector = "";
@@ -168,52 +190,35 @@ function getSector(id) {
     });
     return sector;
 }
-
-
-var layerGroupTotal = L.layerGroup([markadores]);
-
-var layerGroupTotal_ideas_innovadoras = L.layerGroup([markers_ideas_innovadoras])
-var layerGroupTotal_buenas_practicas = L.layerGroup([markers_buenas_practicas])
-
-var OverLayMaps = {
-    '<i class="fa-solid fa-lightbulb icon-title"></i> Ideas Innovadoras': layerGroupTotal_ideas_innovadoras,
-    '<i class="fa-solid fa-trophy"></i> Buenas Practicas': layerGroupTotal_buenas_practicas,
-    'Ambos': layerGroupTotal,
-};
-L.control.layers(OverLayMaps).addTo(map);
-
-datos.forEach((element) => {
-    let p = getPais(element.proyecto.pais);
-    let marker = L.marker([element.lat, element.lng], {
-        id: element.proyecto.id,
-        type: element.type,
-        img: getImg(element.proyecto.id),
-        pais: p[0].url,
-        pais_name: p[0].nombre,
-        ods: getODS(JSON.parse(element.proyecto.ods)),
-        sector: getSector(element.proyecto.sector),
-        content: element.proyecto.descripcion,
-        name: element.proyecto.titulo,
-        ciudad: element.ciudad,
-        popularidad: element.proyecto.popularidad,
-        entidad: element.proyecto.entidad,
-        poblacion: element.proyecto.poblacion,
-        imagenes: getImagenes(element.proyecto.id),
-        pdfs: getDocumentos(element.proyecto.id)
-    }).bindPopup(element.proyecto.titulo);
-
-    if (element.type == "buena practica") {
-        marker.setIcon(proyectoMarker);
-        markers_buenas_practicas.addLayer(marker);
+/*================ funcion para controlar los layers ============= */
+function updateMarkers() {
+    // Obtén el estado de los checkboxes
+    var group1Visible = document.getElementById('color-1').checked;
+    var group2Visible = document.getElementById('color-2').checked;
+    var group3Visible = document.getElementById('color-3').checked;
+  
+    // Muestra u oculta los grupos de marcadores según el estado de los checkboxes
+    if (group1Visible) {
+      markadores.addTo(map);
+    } else {
+      markadores.removeFrom(map);
     }
-
-    if (element.type == "idea inovadora") {
-        marker.setIcon(ideaMarker);
-        markers_ideas_innovadoras.addLayer(marker);
+    if (group2Visible) {
+      markers_buenas_practicas.addTo(map);
+    } else {
+      markers_buenas_practicas.removeFrom(map);
     }
-    markadores.addLayer(marker);
-});
+    if (group3Visible) {
+      markers_ideas_innovadoras.addTo(map);
+    } else {
+      markers_ideas_innovadoras.removeFrom(map);
+    }
+}
+document.getElementById('color-1').addEventListener('change', updateMarkers);
+document.getElementById('color-2').addEventListener('change', updateMarkers);
+document.getElementById('color-3').addEventListener('change', updateMarkers);
 
+/*================= funcion para compatir un markador ============== */
 function compartir() {
     let btn_compartir_facebook = document.getElementById("btn-facebook");
     let btn_compartir_twitter = document.getElementById("btn-twitter");
@@ -298,7 +303,6 @@ function FormLike() {
             });
     });
 }
-
 /*================== like marker ================ */
 function recorrer_cache() {
     let id = document.getElementById("id_value").value;
@@ -313,7 +317,40 @@ function recorrer_cache() {
         }
     }
 }
+/*================ RECORRIDO DE LOS MARKADORES ================== */
+datos.forEach((element) => {
+    let p = getPais(element.proyecto.pais);
+    let marker = L.marker([element.lat, element.lng], {
+        id: element.proyecto.id,
+        type: element.type,
+        img: getImg(element.proyecto.id),
+        pais: p[0].url,
+        pais_name: p[0].nombre,
+        ods: getODS(JSON.parse(element.proyecto.ods)),
+        sector: getSector(element.proyecto.sector),
+        content: element.proyecto.descripcion,
+        name: element.proyecto.titulo,
+        ciudad: element.ciudad,
+        popularidad: element.proyecto.popularidad,
+        entidad: element.proyecto.entidad,
+        poblacion: element.proyecto.poblacion,
+        imagenes: getImagenes(element.proyecto.id),
+        pdfs: getDocumentos(element.proyecto.id)
+    }).bindPopup(element.proyecto.titulo);
 
+    if (element.type == "buena practica") {
+        marker.setIcon(proyectoMarker);
+        markers_buenas_practicas.addLayer(marker)
+    }
+
+    if (element.type == "idea inovadora") {
+        marker.setIcon(ideaMarker);
+        markers_ideas_innovadoras.addLayer(marker)
+    }
+    markadores.addLayer(marker);
+});
+
+//FUNCION SIDEBAR PARA LOS MAKADORES
 function principal(a) {
     var url = new URL(window.location.href);
     url.searchParams.set("id", window.btoa(a.layer.options.id));
@@ -432,70 +469,33 @@ function principal(a) {
     FormLike();
     recorrer_cache();
 }
-
 markadores.on("click", principal);
 markers_buenas_practicas.on("click", principal);
 markers_ideas_innovadoras.on("click", principal);
 
 /*============== libreria para las imagenes ============= */
-
 markadores.on("mouseover", function (e) {
     this.openPopup();
 });
-
 markadores.on("mouseover", function (e) {
     this.openTooltip();
 });
-
-/*var markers_ideas_innovadoras = markadores.filters(function(marker){
-    return marker.options.type === "idea inovadora"
-})
-
-var markers_buenas_practicas = markadores.filters(function(marker){
-    return marker.options.type === "buena practica"
-})*/
 
 //creacion de un buscador
 var searchControl = new L.Control.Search({
     layer: layerGroupTotal, // Capa en la que se realizará la búsqueda
     propertyName: "name",
-    textPlaceholder: "Buscar ...",
-    //initial: false,
-    //autoCollapse: false,
-    /*filterData: function(text, records){
-        console.log("texto")
-        console.log(text)
-        console.log("records")
-        console.log(records)
-    }*/
-    /*filterData: function(text, records) {
-        var searchWords = text.trim().toLowerCase().split(' ');
-        return records.filter(function(record) {
-            var nameWords = record.name.trim().toLowerCase().split(' ');
-            return searchWords.every(function(searchWord) {
-                return nameWords.some(function(nameWord) {
-                    return nameWord.indexOf(searchWord) !== -1;
-                });
-            });
-        });
-    }*/
-    //En este ejemplo, hemos modificado la función filterData para buscar cada palabra de la cadena de búsqueda en cada campo del registro. Para hacer esto, utilizamos un bucle for..in para iterar a través de las propiedades del objeto record, y luego verificamos si el valor de cada propiedad es una cadena y si contiene la palabra de búsqueda. Si se encuentra la palabra en el valor, establecemos la variable found en true y salimos del bucle. Si se encuentra al menos una palabra en el registro, devolvemos true, de lo contrario, devolvemos false.
+    textPlaceholder: "Buscar ...",   
 });
-map.addControl(searchControl);
-
-//searchControl._container.classList.add('centrado-ampliado');
-
 //una vez encontrado el buscador realizamos un zoom en el marcador
 searchControl.on("search:locationfound", function (e) {
     console.log(e);
     map.setView(e.latlng, 5); // Zoom a la posición del marcador encontrado con un nivel de zoom de 16
 });
-
 // Agregar un controlador de eventos para el evento "search:cancel"
 searchControl.on("search:cancel", function (e) {
     console.log(searchControl.marker);
 });
-
 //posicion de los botones de zoom del mapa
 map.zoomControl.setPosition("bottomright");
 
@@ -506,7 +506,6 @@ function cargarMapa() {
     if (id) {
         localizarMarkerPorId(id);
     }
-
     //generar cache
     const CacheItems = [];
     localStorage.setItem("like", JSON.stringify(CacheItems));
@@ -515,25 +514,12 @@ function cargarMapa() {
 /*======================= buscar un marker por su ID ================= */
 function localizarMarkerPorId(id) {
     // Buscar el marker correspondiente al ID
-    let marker = null;
-    /*markers_buenas_practicas.eachLayer(function (layer) {
-        if (layer.options.id == window.atob(id)) {
-            marker = layer;
-        }
-    });*/
-
-    /*markers_ideas_innovadoras.eachLayer(function (layer) {
-        if (layer.options.id == window.atob(id)) {
-            marker = layer;
-        }
-    });*/
-
+    let marker = null;   
     markadores.eachLayer(function (layer) {
         if (layer.options.id == window.atob(id)) {
             marker = layer;
         }
     });
-
     // Si se encontró el marker, centrar el mapa en él
     if (marker) {
         map.setView(marker.getLatLng(), 15);
@@ -542,4 +528,11 @@ function localizarMarkerPorId(id) {
     }
 }
 
+/*================================== */
+var mapContainer = map.getContainer();
+mapContainer.appendChild(div);
+map.addControl(sidebar);
+map.addLayer(markadores);
+map.addControl(searchControl);
+/*================================== */
 cargarMapa();
