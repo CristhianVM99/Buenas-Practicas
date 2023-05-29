@@ -106,6 +106,20 @@ action="{{ route('registro.crear') }}"
         <x-text-input id="presupuesto" class="block mt-1 w-full" type="text" name="presupuesto" :value="old('presupuesto', isset($registro)?$registro->presupuesto: null)" autofocus placeholder="Cantidad de presupuesto"/>
         <x-input-error :messages="$errors->get('presupuesto')" class="mt-2" />
       </div>
+
+      <!-- Latitud -->
+      <div class="mt-4 col-sm-6 p-0 pr-5">
+        <x-input-label for="latitud" :value="__('Latitud del Proyecto')" />
+        <x-text-input id="latitud" class="block mt-1 w-full" type="text" name="latitud" :value="old('latitud', isset($registro)?$registro->latitud: null)" autofocus placeholder="Coordenadas de latitud"/>
+        <x-input-error :messages="$errors->get('latitud')" class="mt-2" />
+      </div>
+
+      <!-- Longitud -->
+      <div class="mt-4 col-sm-6 p-0">
+        <x-input-label for="longitud" :value="__('Longitud del Proyecto')" />
+        <x-text-input id="longitud" class="block mt-1 w-full" type="text" name="longitud" :value="old('longitud', isset($registro)?$registro->longitud: null)" autofocus placeholder="Coordenadas de longitud"/>
+        <x-input-error :messages="$errors->get('longitud')" class="mt-2" />
+      </div>
     </div>  
   </div>
 </form>

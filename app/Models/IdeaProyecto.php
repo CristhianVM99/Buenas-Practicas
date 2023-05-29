@@ -26,6 +26,8 @@ class IdeaProyecto extends Model
         'ods',
         'aprobacion',
         'popularidad',
+        'latitud',
+        'longitud'
     ];
 
     public function tipo_de_proyecto()

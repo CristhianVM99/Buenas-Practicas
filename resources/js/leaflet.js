@@ -23,8 +23,16 @@ import "../css/leaflet.css";
 /*================== Libreria Axios ================ */
 import axios from "axios";
 /*================== Librerias para Swiper ================ */
-import { register } from 'swiper/element/bundle';
+import { register } from "swiper/element/bundle";
 register();
+
+//VARIABLES GLOBALES
+var proyectos = [];
+var documentos = [];
+var paises = [];
+var categorias = [];
+var sectores = []
+var ciudades = []
 
 //CREACION DE LA INSTANCIA
 /*================== Creamos la Instancia para LEAFLET MAP ================ */
@@ -63,6 +71,7 @@ var proyectoMarker = L.ExtraMarkers.icon({
     prefix: "fa-solid",
 });
 
+//grupo de markadores.
 var markadores = L.markerClusterGroup({
     spiderfyOnMaxZoom: false,
     showCoverageOnHover: false,
@@ -84,9 +93,9 @@ var markers_buenas_practicas = L.markerClusterGroup({
 /*================== FIN DE LEAFLET MAP ================ */
 
 /*=============== adicionamos un elemento checkbox al MAP ================ */
-var div = L.DomUtil.create('div', 'leaflet-control-chekbox');
+var div = L.DomUtil.create("div", "leaflet-control-chekbox");
 
-div.innerHTML = `<div class="radio-input">
+div.innerHTML = `<div class="radio-input" id="chekboxLayers">
 <input checked="" value="color-1" name="color" id="color-1" type="radio">
 <label for="color-1">
   <p class="texto-lf">Todos</p>
@@ -111,47 +120,63 @@ div.innerHTML = `<div class="radio-input">
   </span>
 </label>
 
-</div>`
+</div>`;
 var mapContainer = map.getContainer();
 mapContainer.appendChild(div);
 
+
+/*===================== adicionamos un elemento search en el MAP ========== */
+var layerElement = L.DomUtil.create("div", "leaflet-control-layerElement");
+layerElement.innerHTML = `
+<i class="fa-solid fa-layer-group" id="layerElements"></i>
+`
+mapContainer.appendChild(layerElement);
+
+function mostrarLayers(){
+    let layers = document.getElementById('chekboxLayers')
+    let layerButton = document.getElementById('layerElements')
+    layerButton.addEventListener('click',()=>{
+        layers.classList.toggle("leaflet-control-chekbox-hidden")
+    })    
+}
+mostrarLayers()
 //FUNCIONES PARA LOS MARKADORES
 /*=============== funcion que retorna la url de una imagen ============ */
 function getImg(id) {
     let url = "#";
     documentos.forEach((element) => {
         if (element.proyecto_id == id && element.tipo == "imagenes") {
-            url = "storage/imagenes/"+element.name;
+            url = "storage/imagenes/" + element.name;
         }
     });
     return url;
 }
 /*================= funcion que retorna una array de imagenes =========== */
-function getImagenes(id){
+function getImagenes(id) {
     let imagenes = [];
-    let url = "#"
+    let url = "#";
     documentos.forEach((element) => {
         if (element.proyecto_id == id && element.tipo == "imagenes") {
             url = "storage/imagenes/" + element.name;
-            imagenes.push(url)
+            imagenes.push(url);
         }
     });
-    return imagenes
+    return imagenes;
 }
 /*================= funcion que retorna un array de documentos ========== */
-function getDocumentos(id){
+function getDocumentos(id) {
     let documentos_array = [];
-    let url = "#"
+    let url = "#";
     documentos.forEach((element) => {
         if (element.proyecto_id == id && element.tipo == "documentos") {
             url = element.id;
             documentos_array.push({
                 url: url,
-                nombre: element.name_original
-            })
+                nombre: element.name_original,
+            });
         }
     });
-    return documentos_array
+    return documentos_array;
 }
 /*================ funcion para retornar la bandera de un pais =============== */
 function getPais(pais) {
@@ -192,33 +217,43 @@ function getSector(id) {
     });
     return sector;
 }
+/*============ funcion para retornar la ciudad ====================== */
+function getCiudad(id){
+    let ciudad = "";    
+    ciudades.forEach((element)=>{        
+        if(element.id == id){            
+            ciudad = element.name;
+        }
+    })
+    return ciudad;
+}
 /*================ funcion para controlar los layers ============= */
 function updateMarkers() {
     // Obtén el estado de los checkboxes
-    var group1Visible = document.getElementById('color-1').checked;
-    var group2Visible = document.getElementById('color-2').checked;
-    var group3Visible = document.getElementById('color-3').checked;
-  
+    var group1Visible = document.getElementById("color-1").checked;
+    var group2Visible = document.getElementById("color-2").checked;
+    var group3Visible = document.getElementById("color-3").checked;
+
     // Muestra u oculta los grupos de marcadores según el estado de los checkboxes
     if (group1Visible) {
-      markadores.addTo(map);
+        markadores.addTo(map);
     } else {
-      markadores.removeFrom(map);
+        markadores.removeFrom(map);
     }
     if (group2Visible) {
-      markers_buenas_practicas.addTo(map);
+        markers_buenas_practicas.addTo(map);
     } else {
-      markers_buenas_practicas.removeFrom(map);
+        markers_buenas_practicas.removeFrom(map);
     }
     if (group3Visible) {
-      markers_ideas_innovadoras.addTo(map);
+        markers_ideas_innovadoras.addTo(map);
     } else {
-      markers_ideas_innovadoras.removeFrom(map);
+        markers_ideas_innovadoras.removeFrom(map);
     }
 }
-document.getElementById('color-1').addEventListener('change', updateMarkers);
-document.getElementById('color-2').addEventListener('change', updateMarkers);
-document.getElementById('color-3').addEventListener('change', updateMarkers);
+document.getElementById("color-1").addEventListener("change", updateMarkers);
+document.getElementById("color-2").addEventListener("change", updateMarkers);
+document.getElementById("color-3").addEventListener("change", updateMarkers);
 
 /*================= funcion para compatir un markador ============== */
 function compartir() {
@@ -298,13 +333,69 @@ function FormLike() {
                 localStorage.setItem("like", JSON.stringify(beforelikes));
                 span.innerHTML = parseInt(span.innerHTML) + 1;
                 btn.style.color = "#ff0000";
-                span.style.color = "#fff";
+                span.style.color = "#fff";                
             })
             .catch(function (error) {
                 console.log(error);
             });
     });
 }
+
+/*============= optencion de los proyectos ===============*/
+function getProyectos(){
+
+    axios.get("/mapa/proyectos")
+    .then((response) => {
+        proyectos = response.data.listaIdeasProyecto
+        documentos = response.data.documentos
+        paises = response.data.paises
+        categorias = response.data.ods
+        ciudades = response.data.ciudades
+        sectores = response.data.sectores        
+       response.data.listaIdeasProyecto.forEach((element) => {
+        if(element.lat != null && element.lng != null){
+            let p = getPais(element.proyecto.pais);
+            let marker = L.marker([element.lat, element.lng], {
+                id: element.proyecto.id,
+                type: element.type,
+                img: getImg(element.proyecto.id),
+                pais: p[0].url,
+                pais_name: p[0].nombre,
+                ods: getODS(JSON.parse(element.proyecto.ods)),
+                sector: getSector(element.proyecto.sector),
+                content: element.proyecto.descripcion,
+                name: element.proyecto.titulo,
+                ciudad: getCiudad(element.ciudad),
+                presupuesto: element.proyecto.presupuesto,
+                popularidad: element.proyecto.popularidad,
+                entidad: element.proyecto.entidad,
+                poblacion: element.proyecto.poblacion,
+                imagenes: getImagenes(element.proyecto.id),
+                pdfs: getDocumentos(element.proyecto.id),
+            }).bindPopup(element.proyecto.titulo);
+        
+            if (element.type == "buena practica") {
+                marker.setIcon(proyectoMarker);
+                markers_buenas_practicas.addLayer(marker);
+            }
+        
+            if (element.type == "idea inovadora") {
+                marker.setIcon(ideaMarker);
+                markers_ideas_innovadoras.addLayer(marker);
+            }
+            markadores.addLayer(marker);
+             
+        }
+        });
+    })
+    .catch((error) => {
+        console.log(error);
+        /*$("#ciudad").append(`
+                <option value="" selected disabled>No se encontro ciudades relacionados</option>
+            `);*/
+    });
+}
+
 /*================== like marker ================ */
 function recorrer_cache() {
     let id = document.getElementById("id_value").value;
@@ -319,38 +410,6 @@ function recorrer_cache() {
         }
     }
 }
-/*================ RECORRIDO DE LOS MARKADORES ================== */
-datos.forEach((element) => {
-    let p = getPais(element.proyecto.pais);
-    let marker = L.marker([element.lat, element.lng], {
-        id: element.proyecto.id,
-        type: element.type,
-        img: getImg(element.proyecto.id),
-        pais: p[0].url,
-        pais_name: p[0].nombre,
-        ods: getODS(JSON.parse(element.proyecto.ods)),
-        sector: getSector(element.proyecto.sector),
-        content: element.proyecto.descripcion,
-        name: element.proyecto.titulo,
-        ciudad: element.ciudad,
-        popularidad: element.proyecto.popularidad,
-        entidad: element.proyecto.entidad,
-        poblacion: element.proyecto.poblacion,
-        imagenes: getImagenes(element.proyecto.id),
-        pdfs: getDocumentos(element.proyecto.id)
-    }).bindPopup(element.proyecto.titulo);
-
-    if (element.type == "buena practica") {
-        marker.setIcon(proyectoMarker);
-        markers_buenas_practicas.addLayer(marker)
-    }
-
-    if (element.type == "idea inovadora") {
-        marker.setIcon(ideaMarker);
-        markers_ideas_innovadoras.addLayer(marker)
-    }
-    markadores.addLayer(marker);
-});
 
 //FUNCION SIDEBAR PARA LOS MAKADORES
 function principal(a) {
@@ -361,13 +420,9 @@ function principal(a) {
         `<div class="isotope-item ideas-innovadoras sidebar-map">
             <article class="post vertical-item content-padding with_background rounded overflow_hidden loop-color sidebar-map-item">
                 <header class="entry-header">
-                    <h1>${
-                        a.layer.options.name
-                    }</h1>
+                    <h1>${a.layer.options.name}</h1>
                     <div class="redes-sociales">
-                    <p>${
-                        a.layer.options.type
-                    }</p>
+                    <p>${a.layer.options.type}</p>
                         <ul class="wrapper">
                             <li class="icon facebook">
                                 <span class="tooltip">Facebook</span>
@@ -387,9 +442,7 @@ function principal(a) {
                 <div class="item-media entry-thumbnail img-type">
                     <img src="${a.layer.options.img}" alt="">
                     <img class="pais" src="${a.layer.options.pais}" alt="">
-                    <span class="sector">${
-                        a.layer.options.sector
-                    }</span>
+                    <span class="sector">${a.layer.options.sector}</span>
                     <form id="formlike">
                         <input type="hidden" id="id_value" name="id" value="${window.btoa(
                             a.layer.options.id
@@ -405,46 +458,62 @@ function principal(a) {
                             a.layer.options.pais_name
                         }</span>
                         <span class="l-ciudad">${a.layer.options.ciudad}</span>
-                        <span class="l-poblacion">${a.layer.options.poblacion}</span>
+                        <span class="l-poblacion">${
+                            a.layer.options.poblacion
+                        }</span>
                         <p>${a.layer.options.content}</p>
 
                         <p class="poblacion">Presupuesto:
-                            <span class="campo">150000 Bs.</span>
+                            <span class="campo">${a.layer.options.presupuesto} Bs.</span>
                         </p>                        
                         <!--incio de markadores-->
-                        <div class="imagenes-content">
+                        <div class="imagenes-content" id="imagenes-content">
                         <h2>Imagenes del proyecto</h2>
                         <swiper-container class="mySwiper" pagination="true" pagination-clickable="true" navigation="true" space-between="30" loop="true">
-                        ${a.layer.options.imagenes.map(element => `
+                        ${a.layer.options.imagenes
+                            .map(
+                                (element) => `
                         <swiper-slide>
                           <a href="${element}" target="_blank">
                             <img src="${element}" alt="">
                           </a>
                         </swiper-slide>
-                      `).join('')}
+                      `
+                            )
+                            .join("")}
                         </swiper-container>
                         </div>
                         <!--fin de markadores-->
-                        <div class="documentos-content">
+                        <div class="documentos-content" id="documentos-content">
                             <h2>Documentos del proyecto</h2>
-                            ${a.layer.options.pdfs.map(element => `
+                            ${a.layer.options.pdfs
+                                .map(
+                                    (element) => `
                                 <p>#<a href="documento/${element.url}" target="_blank">${element.nombre}</a></p>
-                            `).join('')}
+                            `
+                                )
+                                .join("")}
                         </div>
-                        <div class="entidades-content">
+                        <div class="entidades-content" id="entidades-content">
                             <h2>Entidades que patrocinan el proyecto</h2>
                             <ul>
-                                <li><p>#<span>${a.layer.options.entidad}</span></p></li>
+                                <li><p>#<span>${
+                                    a.layer.options.entidad
+                                }</span></p></li>
                             </ul>
                         </div>
-                        <div class="ods-content">
+                        <div class="ods-content" id="ods-content">
                         <h2>Objetivos de Desarrollo Sostenible</h2>
                         <swiper-container class="swiper-ods" slides-per-view="3" navigation="true">
-                            ${a.layer.options.ods.map(element => `
+                            ${a.layer.options.ods
+                                .map(
+                                    (element) => `
                                     <swiper-slide>
                                         <img class="icono_url" src="${element.icono_url}"/>
                                     </swiper-slide>
-                            `).join('')}
+                            `
+                                )
+                                .join("")}
                         </swiper-container>
                         </div>
                     </div>
@@ -452,7 +521,23 @@ function principal(a) {
                 </div>
             </article>
         </div>`
-    );
+    );    
+    if(a.layer.options.ods.length == 0){
+        let odss= document.getElementById("ods-content")
+        odss.style.display = "none";
+    }
+    if(a.layer.options.entidad == 0){
+        let odss= document.getElementById("entidades-content")
+        odss.style.display = "none";
+    }    
+    if(a.layer.options.pdfs == 0){
+        let odss= document.getElementById("documentos-content")
+        odss.style.display = "none";
+    }    
+    if(a.layer.options.imagenes == 0){
+        let odss= document.getElementById("imagenes-content")
+        odss.style.display = "none";
+    }
     sidebar.show();
     if (a.layer.options.type == "idea inovadora") {
         let ideas_innovadoras = document.getElementById("sidebar");
@@ -483,20 +568,23 @@ markadores.on("mouseover", function (e) {
 var searchControl = new L.Control.Search({
     layer: markadores, // Capa en la que se realizará la búsqueda
     propertyName: "name",
-    textPlaceholder: "Buscar ...",   
+    textPlaceholder: "Buscar ...",
+    textErr: "No se encontraron resultados"
 });
 //una vez encontrado el buscador realizamos un zoom en el marcador
 searchControl.on("search:locationfound", function (e) {
-    console.log(e);
-    map.setView(e.latlng, 5); // Zoom a la posición del marcador encontrado con un nivel de zoom de 16
+    map.setView(e.latlng, 10); // Zoom a la posición del marcador encontrado con un nivel de zoom de 16
 });
 // Agregar un controlador de eventos para el evento "search:cancel"
 searchControl.on("search:cancel", function (e) {
     console.log(searchControl.marker);
 });
+
 //posicion de los botones de zoom del mapa
 map.zoomControl.setPosition("bottomright");
 
+
+//funcion principal para el mapa
 function cargarMapa() {
     // Obtener el ID de la URL y llamar a la función de búsqueda
     var urlParams = new URLSearchParams(window.location.search);
@@ -512,7 +600,7 @@ function cargarMapa() {
 /*======================= buscar un marker por su ID ================= */
 function localizarMarkerPorId(id) {
     // Buscar el marker correspondiente al ID
-    let marker = null;   
+    let marker = null;
     markadores.eachLayer(function (layer) {
         if (layer.options.id == window.atob(id)) {
             marker = layer;
@@ -531,4 +619,5 @@ map.addControl(sidebar);
 map.addLayer(markadores);
 map.addControl(searchControl);
 /*================================== */
+getProyectos();
 cargarMapa();

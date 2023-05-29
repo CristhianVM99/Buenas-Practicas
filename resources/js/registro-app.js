@@ -99,7 +99,7 @@ $('form#registro').on('submit', function(e, tipoClick = null) {
 async function submitForm(form){
     console.log("datos del formulario desde submitForm")
     console.log(form)
-    let jsonData = $(form).serializeArray()
+    let jsonData = $(form).serializeArray()    
     .reduce(function(a, z) { a[z.name] = z.value; return a; }, {});
     jsonData.ods = JSON.stringify(list_ods($('.ods .marco.active')));
     if($('input#estado').length == 1){

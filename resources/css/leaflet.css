@@ -1,9 +1,13 @@
 @import url("https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;500;700&display=swap");
 
+:root{
+    --swiper-navigation-color:#78bf4d;
+}
+
 /* Cambia el color del botón de zoom a azul */
 #mapid {
     width: 100%;
-    height: 90vh;
+    height: 80vh;
 }
 
 /*===================== buttons de zoom-in y zoom-out ================*/
@@ -237,7 +241,7 @@
     width: 100%;
     height: 90vh;
 }
-
+  
 .leaflet-control-search {
     width: 25%;
     left: 2%;
@@ -253,16 +257,11 @@
     border-bottom: 1px solid #56ab2f !important;
 }
 
-.search-input {
-    display: block !important;
-}
-
 label.search-input {
     display: none !important;
 }
 
 a.search-button {
-    /*pointer-events: none !important;*/
     position: absolute;
     right: 2%;
     box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.4) !important;
@@ -273,13 +272,14 @@ a.search-button {
 }
 
 input.search-input {
-    width: 100%;
+    width: 100% !important;
     background: transparent;
     border-radius: 20px !important;
     border: none !important;
     padding: 20px 15px !important;
     margin: 0 !important;
     box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.4) !important;
+    max-width: 100% !important;
 }
 ul.search-tooltip {
     width: 100%;
@@ -294,9 +294,9 @@ li.search-tip {
 }
 
 .leaflet-interactive {
-    stroke: #56ab2f;
+    stroke: transparent;
     stroke-width: 3 !important;
-    fill: #f7ff00;
+    fill: transparent;
 }
 .search-alert{
     position: absolute;
@@ -309,6 +309,40 @@ li.search-tip {
     text-align: center;
     font-size: 1.1em !important;
 }
+
+@media (max-width: 476px) {
+    .leaflet-control-search{
+        width: 95%;
+        top: 1%;
+    }
+
+    a.search-button{
+        position: absolute !important;       
+    }
+}
+@media (min-width: 606px) {
+    .leaflet-control-search{
+        width: 50%;
+        top: 1%;
+    }
+
+    a.search-button{
+        position: absolute !important;       
+    }
+}
+@media (min-width: 1070px) {
+    .leaflet-control-search{
+        width: 30%;
+    }
+
+    a.search-button{
+        position: absolute !important;       
+    }
+}
+  
+.search-input {
+    display: block !important;    
+}*/
 
 /*======================== layers tooogle =================*/
 .leaflet-control-layers.leaflet-control {
@@ -849,19 +883,19 @@ li.search-tip {
     height: 90px !important;
     border: 10px solid rgb(232, 232, 232);
   }
-
-  .swiper-button-prev,
-  .swiper-button-next{
-    color: #56ab2f !important;
-    border: 1px solid red !important;
-  }
   /*=================== select ==================*/
 
   .leaflet-control-chekbox{
     position: absolute;
     z-index: 500;
-    top: 10px;
+    top: 70px;
     right: 10px;        
+    display: block;
+    transition: right linear 0.5s;
+    visibility: hidden;
+  }
+  .leaflet-control-chekbox-hidden{
+    visibility: visible;
   }
 
   .radio-input {
@@ -937,3 +971,44 @@ li.search-tip {
     background-color: #f1c40f;
   }
   
+  @media (max-width: 476px) {
+    .leaflet-control-chekbox{        
+        top: 105px;
+    }
+}
+
+/*==================== layer element ===============0*/
+.leaflet-control-layerElement{
+    position: absolute;
+    z-index: 500;
+    top: 15px;
+    right: 25px; 
+}
+.leaflet-control-layerElement i {
+    background-color: #56ab2f;
+    color: #fff;
+    padding: 12px 12px;
+    border: none;
+    border-radius: 5px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    font-size: 17px;
+  }
+  
+  .leaflet-control-layerElement i:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+    background-color: #76b852;
+  }
+  
+  .leaflet-control-layerElement i:active {
+    transform: translateY(0.5em);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+  }
+
+  @media (max-width: 476px) {
+    .leaflet-control-layerElement{        
+        top: 60px;
+    }
+    }

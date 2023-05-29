@@ -22,7 +22,11 @@ class StoreIdeaProyectoRequest extends FormRequest
             'descripcion'   => 'required',
             'poblacion'     => 'required',
             'entidad'       => 'nullable',
+            'presupuesto'   => 'nullable',
             'ods'           => 'nullable',
+            'popularidad'   => 'nullable',
+            'latitud'       => 'nullable',
+            'longitud'      => 'nullable',
             'estado'        => 'nullable',
         ];
     }
