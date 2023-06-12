@@ -95,9 +95,9 @@
 /*===========Estilos para Buenas Practicas=============*/
 .ideas-innovadoras {
     /*    background: #f7dc6f;
-    background: #F09819;  
-    background: -webkit-linear-gradient(to left, #EDDE5D, #F09819);  
-    background: linear-gradient(to left, #EDDE5D, #F09819); 
+    background: #F09819;
+    background: -webkit-linear-gradient(to left, #EDDE5D, #F09819);
+    background: linear-gradient(to left, #EDDE5D, #F09819);
 */
 }
 .buenas-practicas {
@@ -241,7 +241,7 @@
     width: 100%;
     height: 90vh;
 }
-  
+
 .leaflet-control-search {
     width: 25%;
     left: 2%;
@@ -317,7 +317,7 @@ li.search-tip {
     }
 
     a.search-button{
-        position: absolute !important;       
+        position: absolute !important;
     }
 }
 @media (min-width: 606px) {
@@ -327,7 +327,7 @@ li.search-tip {
     }
 
     a.search-button{
-        position: absolute !important;       
+        position: absolute !important;
     }
 }
 @media (min-width: 1070px) {
@@ -336,12 +336,12 @@ li.search-tip {
     }
 
     a.search-button{
-        position: absolute !important;       
+        position: absolute !important;
     }
 }
-  
+
 .search-input {
-    display: block !important;    
+    display: block !important;
 }*/
 
 /*======================== layers tooogle =================*/
@@ -386,14 +386,14 @@ li.search-tip {
 .leaflet-control-layers-base span {
     cursor: pointer;
     display: flex;
-    justify-content: space-between;    
+    justify-content: space-between;
 }
 
 .leaflet-control-layers-base span span {
     /*border: 1px solid blue;*/
 }
 
-.leaflet-control-layers-base span i{    
+.leaflet-control-layers-base span i{
     position: absolute;
     top: 5px;
     left: 3px;
@@ -430,9 +430,9 @@ li.search-tip {
 .leaflet-control-layers-base span input[type="radio"]::before,
 .leaflet-control-layers-base span input[type="radio"]::after {
     content: '';
-    display: flex;    
+    display: flex;
     justify-self: center;
-    border-radius: 50%;    
+    border-radius: 50%;
 }
 
 .leaflet-control-layers-base span input[type="radio"]::before {
@@ -454,7 +454,7 @@ li.search-tip {
     height: calc(100% / 2);
     background: var(--radio-checked) !important;
     top: var(--y, 100%);
-    transition: top 0.5s cubic-bezier(0.48, 1.97, 0.5, 0.63); 
+    transition: top 0.5s cubic-bezier(0.48, 1.97, 0.5, 0.63);
 }
 
 .leaflet-control-layers-base span input[type="radio"]:checked {
@@ -600,16 +600,16 @@ li.search-tip {
 
 .wrapper {
     display: inline-flex;
-    list-style: none;    
+    list-style: none;
     width: 50%;
     font-family: "Poppins", sans-serif;
     justify-content: center;
   }
-  
+
   .wrapper .icon {
     position: relative;
     background: #fff;
-    border-radius: 50%;    
+    border-radius: 50%;
     margin: 10px;
     width: 35px;
     height: 35px;
@@ -622,7 +622,7 @@ li.search-tip {
     cursor: pointer;
     transition: all 0.2s cubic-bezier(0.68, -0.55, 0.265, 1.55);
   }
-  
+
   .wrapper .tooltip {
     position: absolute;
     top: 0;
@@ -636,7 +636,7 @@ li.search-tip {
     pointer-events: none;
     transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
   }
-  
+
   .wrapper .tooltip::before {
     position: absolute;
     content: "";
@@ -648,19 +648,19 @@ li.search-tip {
     transform: translate(-50%) rotate(45deg);
     transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
   }
-  
+
   .wrapper .icon:hover .tooltip {
     top: -45px;
     opacity: 1;
     visibility: visible;
     pointer-events: auto;
   }
-  
+
   .wrapper .icon:hover span,
   .wrapper .icon:hover .tooltip {
     text-shadow: 0px -1px 0px rgba(0, 0, 0, 0.1);
   }
-  
+
   .wrapper .facebook{
     color: #1877F2;
   }
@@ -676,14 +676,14 @@ li.search-tip {
     background: #1877F2;
     color: #fff;
   }
-  
+
   .wrapper .twitter:hover,
   .wrapper .twitter:hover .tooltip,
   .wrapper .twitter:hover .tooltip::before {
     background: #1DA1F2;
     color: #fff;
   }
-  
+
   .wrapper .instagram:hover,
   .wrapper .instagram:hover .tooltip,
   .wrapper .instagram:hover .tooltip::before {
@@ -744,9 +744,9 @@ li.search-tip {
     display: block;
     z-index: -1;
    }
-   
+
    .btn-favorite:hover::before {
-    width: 9em;    
+    width: 9em;
    }
    .btn-favorite span{
     position: absolute;
@@ -774,12 +774,12 @@ li.search-tip {
    /*=============== estilos nombre de pais - ciudad ==========*/
    .l-pais_name{
     background: #76b852;
-    padding: 3px 7px;    
+    padding: 3px 7px;
     color: #fff;
-    font-size: 1.1em;    
+    font-size: 1.1em;
     border-top-left-radius: 3px;
     border-bottom-left-radius: 3px;
-    text-shadow: 0px 2px 3px rgba(0, 0, 0, 0.4);    
+    text-shadow: 0px 2px 3px rgba(0, 0, 0, 0.4);
    }
 
    .l-ciudad{
@@ -792,7 +792,7 @@ li.search-tip {
     background: rgba(0, 0, 0, 0.3);
     }
     .l-poblacion::before{
-        content: '# ';        
+        content: '# ';
     }
     .l-poblacion{
         color: #fff;
@@ -838,7 +838,7 @@ li.search-tip {
         color: #000;
     }
 
-    /*============== estilos ods =============*/    
+    /*============== estilos ods =============*/
 /**==================== estilos para galleria de imagenes =================*/
 .imagenes-content,
 .entidades-content,
@@ -849,7 +849,7 @@ li.search-tip {
 .imagenes-content h2,
 .entidades-content h2,
 .documentos-content h2,
-.ods-content h2{ 
+.ods-content h2{
     color: #000;
     text-shadow: 0px 0px 3px rgba(0, 0, 0, 0.4);
     background: #56ab2f;
@@ -889,7 +889,7 @@ li.search-tip {
     position: absolute;
     z-index: 500;
     top: 70px;
-    right: 10px;        
+    right: 10px;
     display: block;
     transition: right linear 0.5s;
     visibility: hidden;
@@ -905,23 +905,23 @@ li.search-tip {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: end;
+    align-items: flex-end;
   }
   .radio-input .texto-lf{
     color: #fff;
     display: inline;
   }
-  
+
   .radio-input input[type=radio] {
     display: none;
   }
-  
+
   .radio-input input[type=radio] + label {
     color: #333;
     font-family: Arial, sans-serif;
     font-size: 14px;
   }
-  
+
   .radio-input input[type=radio] + label span {
     display: inline-block;
     width: 30px;
@@ -937,42 +937,42 @@ li.search-tip {
     text-align: center;
     line-height: 44px;
   }
-  
+
   .radio-input input[type=radio] + label span svg {
     opacity: 0;
     transition: all 0.3s ease;
   }
-  
+
   .radio-input input[type=radio]#color-1 + label span {
     background-color: #2ecc71;
   }
-  
+
   .radio-input input[type=radio]#color-2 + label span {
     background-color: #3498db;
   }
-  
+
   .radio-input input[type=radio]#color-3 + label span {
     background-color: #f1c40f;
   }
-  
+
   .radio-input input[type=radio]:checked + label span svg {
     opacity: 1;
   }
-  
+
   .radio-input:has(input[type=radio]#color-1:checked) {
     background-color: #2ecc71;
   }
-  
+
   .radio-input:has(input[type=radio]#color-2:checked) {
     background-color: #3498db;
   }
-  
+
   .radio-input:has(input[type=radio]#color-3:checked) {
     background-color: #f1c40f;
   }
-  
+
   @media (max-width: 476px) {
-    .leaflet-control-chekbox{        
+    .leaflet-control-chekbox{
         top: 105px;
     }
 }
@@ -982,7 +982,7 @@ li.search-tip {
     position: absolute;
     z-index: 500;
     top: 15px;
-    right: 25px; 
+    right: 25px;
 }
 .leaflet-control-layerElement i {
     background-color: #56ab2f;
@@ -995,20 +995,20 @@ li.search-tip {
     transition: all 0.3s ease-in-out;
     font-size: 17px;
   }
-  
+
   .leaflet-control-layerElement i:hover {
     transform: translateY(-3px);
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
     background-color: #76b852;
   }
-  
+
   .leaflet-control-layerElement i:active {
     transform: translateY(0.5em);
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
   }
 
   @media (max-width: 476px) {
-    .leaflet-control-layerElement{        
+    .leaflet-control-layerElement{
         top: 60px;
     }
     }

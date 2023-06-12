@@ -24,10 +24,10 @@ class RoleSeeder extends Seeder
         DB::table('roles')->truncate();
         DB::table('model_has_roles')->truncate();
 
-        $administrador = Role::create( [ "name" => "Admin" ]);
-        $visitante     = Role::create( [ "name" => "Visitante" ]);
-        $innovador     = Role::create( [ "name" => "Innovador" ]);
-        $experto       = Role::create( [ "name" => "Experto" ]);
+        $administrador = Role::create( [ "name" => "admin" ]);
+        $visitante     = Role::create( [ "name" => "visitante" ]);
+        $innovador     = Role::create( [ "name" => "innovador" ]);
+        $experto       = Role::create( [ "name" => "experto" ]);
 
         $user = User::where('name', '=', "admin")->first();
 
@@ -41,6 +41,6 @@ class RoleSeeder extends Seeder
             ));
         }
         $user->assignRole($administrador);
-        
+
     }
 }

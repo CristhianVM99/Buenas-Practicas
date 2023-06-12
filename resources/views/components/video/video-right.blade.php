@@ -25,10 +25,26 @@
 </style>
 @foreach ($recomendaciones as $item)
     @include('components.video.video-article', [
+        'id'            => $item->id,
         'imagen'        => url('storage/'.$item->foto),
         'titulo'        => $item->titulo,
         'descripcion'   => $item->descripcion,
         'bandera'       => url($item->pais->flag_4x3),
         'videoLink'     => route('video.ver',[$item->id]),
-        ])   
+        'sector'        => 'experiencias',
+        ])
 @endforeach
+<script>
+    function incrementarPopularidad(id) {
+        const video_id = id
+        axios.get(`/incrementar-popularidad/${video_id}`)
+            .then(response => {
+                console.log(response.data);
+                // Realiza alguna acción con la respuesta
+            })
+            .catch(error => {
+                console.error(error);
+                // Maneja el error de alguna manera
+            });
+    }
+</script>

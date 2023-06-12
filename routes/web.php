@@ -16,7 +16,7 @@ use App\Http\Controllers\MapaController;
 use Laravel\Socialite\Facades\Socialite;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
-Route::post('/like-video', [HomeController::class, 'likeVideo'])->name('likeVideo');
+Route::get('/incrementar-popularidad/{id}', [HomeController::class, 'incrementarPopularidad'])->name('video.incrementar_popularidad');
 
 Route::get('/video/{video}', [VideoController::class, 'index'])->name('video.ver');
 Route::get('/equipo', [AutorController::class, 'team'])->name('team');
@@ -35,17 +35,17 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/registro/{registro}/update', [IdeaProyectoController::class, 'update'])->name('registro.update');
     Route::post('registro/crear', [IdeaProyectoController::class, 'crear'])->name('registro.crear');
     Route::get('registros', [IdeaProyectoController::class, 'dataLista'])->name('registros.table');
-    
+
     Route::post('/documento/{registro}/registro', [DocumentoController::class, 'upload'])->name('documento.upload');
     Route::get('/documento/{documento}', [DocumentoController::class, 'getdocumento'])->name('documento.get');
     Route::post('/documento/{documento}/delete', [DocumentoController::class, 'delete'])->name('documento.remove');
-    
+
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::post('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::get('/profile/avatar/{user}', [ProfileController::class, 'getAvatar'])->name('profile.get.avatar');
     Route::post('/profile/avatar/{user}', [ProfileController::class, 'setAvatar'])->name('profile.set.avatar');
-    
+
     Route::get('/pais/{code}/ciudades/', [CiudadController::class, 'getCiudadesPorCodePais'])->name('pais.ciudades');
 
     Route::get('/proyectos/list', [IdeaProyectoController::class, 'index'])->name('proyectos.list');
@@ -60,7 +60,7 @@ Route::middleware(['auth', 'verified', 'role:admin'])->group(function () {
     Route::post('/users/create', [AdminController::class, 'create'])->name('users.create');
     Route::post('/users/{user}/update', [AdminController::class, 'update'])->name('users.update');
     Route::post('/user/delete', [AdminController::class, 'delete'])->name('user.delete');
-    
+
     Route::get('/videos/list', [VideoController::class, 'list'])->name('video.list');
     Route::get('/videos', [VideoController::class, 'dataLista'])->name('videos.table');
     Route::get('/videos/crear', [VideoController::class, 'create'])->name('video.crear');

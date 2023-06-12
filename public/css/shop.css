@@ -318,16 +318,20 @@ li.product {
 	content: "\e626";
 }
 
-.product-buttons button.favorite_button {
+.product-buttons a.favorite_button {
 	background-color: #fff;
 	color: #808080 !important;
 }
 
-.product-buttons button.favorite_button:before {
+.product-buttons a.favorite_button:before {
 	font-family: FontAwesome;
 	content: "\f004";
 }
-.product-buttons button.favorite_button:hover {
+.product-buttons a.favorite_button:hover {
+	color: #e52d27 !important;
+}
+
+.product-buttons a.favorite_button:active {
 	color: #e52d27 !important;
 }
 

@@ -40,42 +40,6 @@
     }
 </style>
 
-<article class="vertical-item content-padding big-padding with_background rounded overflow_hidden post format-standard ">
-    <div class="item-media-wrap">
-        <div class="item-media entry-thumbnail">
-            <iframe src="{{ $video->url }}" title="YouTube video player" frameborder="0" class="iframe"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowfullscreen></iframe>
-        </div>
-    </div>
-    @if ($video->ods)
-        <div class="pt-10 col-lg-3 col-md-4 col-sm-3 text-center text-sm-left">
-            <div class="widget widget_recent_posts">
-                <h4 class="widget-title">Objetivos de Desarrollo Sostenible</h4>
-                <ul class="overflow-y-scroll max-h-[50vh]">
-                    @foreach ($ods as $item)
-                        @if (in_array($item->id, json_decode($video->ods)))
-                            <li class="media">
-                                <div class="pl-[20px] pr-[20px]">
-                                    <img src="{{ url('img/SDG/' . $item->icon) }}" alt="No">
-                                </div>
-                            </li>
-                        @endif
-                    @endforeach
-                </ul>
-            </div>
-        </div>
-    @endif
-    <div class="item-content col-sm-9">
-        <header class="entry-header">
-            <h3 class="entry-title"> {{ $video->titulo }} </h3>
-        </header>
-        <div class="entry-content">
-            <p>{{ $video->descripcion }}</p>
-        </div>
-    </div>
-</article>
-
 <article class="vertical-item content-padding big-padding with_background post format-chat rounded overflow_hidden">
     <div class="item-media-wrap">
         <div class="item-media">
@@ -100,7 +64,7 @@
                 </a> </div>
         </div>
     </div>
-    <div class="item-content entry-content">    
+    <div class="item-content entry-content">
         <div class="col-xs-8">
             <header class="entry-header">
                 <h3 class="entry-header video-left-title"> {{ $video->titulo }} </h3>
@@ -122,7 +86,7 @@
                                 <img src="{{ url('img/SDG/' . $item->icon) }}" alt="No">
                             </div>
                             <div class="media-body media-middle">
-                                <p class="darklinks">{{ $item->name }} </p> 
+                                <p class="darklinks">{{ $item->name }} </p>
                             </div>
                         </li>
                     @endif

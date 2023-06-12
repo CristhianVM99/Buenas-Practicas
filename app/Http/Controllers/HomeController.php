@@ -23,14 +23,15 @@ class HomeController extends Controller
         return view('home', $extras);
     }
 
-    public function likeVideo(Request $request)
+    public function incrementarPopularidad($id)
     {
-        $videoId = $request->input('videoId');
-
-        $video = Video::find($videoId);
+        $video = Video::find($id);
         if ($video) {
             $video->popularidad += 1;
             $video->save();
-        }        
+        }
+
+        // Opcional: Devolver una respuesta JSON con el nuevo valor de popularidad
+        return response()->json(['popularidad' => $video->popularidad]);
     }
 }

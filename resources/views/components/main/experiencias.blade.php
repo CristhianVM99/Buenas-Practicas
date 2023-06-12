@@ -95,6 +95,7 @@
                         <div class="owl-carousel" data-nav="true" data-responsive-lg="3">
                             @foreach ($listVideos as $element)
                                 @include('components.video.video-article', [
+                                    'id' => $element->id,
                                     'imagen' => url('storage/' . $element->foto),
                                     'titulo' => $element->titulo,
                                     'descripcion' => $element->descripcion,
@@ -146,30 +147,17 @@
 
             });
         }
-
-        function likeVideo() {
-        // Obtener el valor del videoId del input oculto
-        const videoId = document.querySelector('input[name="videoId"]').value;
-
-        fetch('{{ route('likeVideo') }}', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-            },
-            body: JSON.stringify({ videoId: videoId })
-        })
-        .then(response => {
-            // Actualizar la interfaz de usuario según sea necesario
-        })
-        .catch(error => {
-            // Manejar errores en caso de que ocurra algún problema con la solicitud
-        });
-    }
-
-    document.getElementById('likeVideoForm').addEventListener('submit', function(event) {
-        event.preventDefault(); // Evitar el comportamiento predeterminado del formulario
-    });
+        function incrementarPopularidad(id) {
+            const video_id = id
+            axios.get(`/incrementar-popularidad/${video_id}`)
+                .then(response => {
+                    console.log(response.data);
+                    // Realiza alguna acción con la respuesta
+                })
+                .catch(error => {
+                    console.error(error);
+                    // Maneja el error de alguna manera
+                });
+        }
     </script>
 @endif
