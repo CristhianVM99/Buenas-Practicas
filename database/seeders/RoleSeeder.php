@@ -24,9 +24,10 @@ class RoleSeeder extends Seeder
         DB::table('roles')->truncate();
         DB::table('model_has_roles')->truncate();
 
-        $admin      = Role::create( [ "name" => "admin" ]);
-        $autor      = Role::create( [ "name" => "autor" ]);
-        $regular    = Role::create( [ "name" => "regular" ]);
+        $administrador = Role::create( [ "name" => "Admin" ]);
+        $visitante     = Role::create( [ "name" => "Visitante" ]);
+        $innovador     = Role::create( [ "name" => "Innovador" ]);
+        $experto       = Role::create( [ "name" => "Experto" ]);
 
         $user = User::where('name', '=', "admin")->first();
 
@@ -39,7 +40,7 @@ class RoleSeeder extends Seeder
                 'email_verified_at' => now(),
             ));
         }
-        $user->assignRole($admin);
+        $user->assignRole($administrador);
         
     }
 }

@@ -1,4 +1,5 @@
 @props([
+    'id'            => 0,
     'imagen'        => url('images/gallery/02.jpg'),
     'titulo'        => 'SIN TÍTULO',
     'descripcion'   => 'Sin Descripcion',
@@ -14,9 +15,9 @@
             <img src="{{ $imagen}}" alt="" srcset="" class="img-experiencias">
         </a>
         <div class="product-buttons">
-            <a href="#" class="favorite_button">
+            <a href="{{ route('likeVideo', ['id' => $id]) }}" class="favorite_button">
                 <span class="sr-only">Add to favorite</span>
-            </a>
+            </a>            
             <a href="#" class="facebook_button">
                 <span class="sr-only">Add to favorite</span>
             </a>
@@ -31,30 +32,33 @@
 @endif
 
 @if ($sector == "autor")
-<article class="post format-small-image">
-    <div class="side-item side-md content-padding big-padding with_background rounded overflow_hidden">
-        <div class="row">
-            <div class="col-md-5">
-                <div class="item-media entry-thumbnail"> 
-                    <a href="@if ($videoLink) {{$videoLink}} @endif" class="inline-block">
-                        <img src="{{ $imagen}}" alt="" srcset="" class="height-100">
-                    </a>
-                    <div class="product-buttons">
-                        <a href="#" class="favorite_button">
-                            <span class="sr-only">Add to favorite</span>
-                        </a>
-                        <a href="#" class="facebook_button">
-                            <span class="sr-only">Add to favorite</span>
-                        </a>
-                    </div>
-                    <img class= "flag" src="{{$bandera}}" alt="No">
-                </div>
+<article class="author-meta side-item side-md content-padding big-padding with_background rounded overflow_hidden">
+    <div class="row">
+        <div class="col-md-7">
+            <div class="item-media top_rounded overflow_hidden article-img-autor-content"> 
+                <a href="@if ($videoLink) {{$videoLink}} @endif">                
+                    <img src="{{ $imagen }}" alt="" class="article-img-autor"> 
+                </a>
+            </div>            
+            <div class="product-buttons product-btn">                
+                <form id="likeVideoForm" action="{{ route('likeVideo') }}" method="POST">
+                    @csrf
+                    <input type="hidden" name="videoId" value="{{ $id }}">
+                    <button type="button" class="favorite_button" onclick="likeVideo()">Add to favorite</button>
+                </form>
+                <a href="#" class="facebook_button">
+                    <span class="sr-only">Add to favorite</span>
+                </a>
             </div>
-            <div class="col-md-7">                
-                <div class="padding_30 overflow_hidden">
-                    <h3 class="entry-title color2 "> <a href="@if ($videoLink) {{$videoLink}} @endif">{{$titulo}}</a> </h3>
-                    <p class="">{{$descripcion}}</p>
-                </div>
+            <img class= "flag" src="{{$bandera}}" alt="No">
+        </div>
+        <div class="col-md-5">
+            <div class="item-content">
+                <header class="entry-header content-justify">
+                    <h4 class="bottommargin_0">{{ $titulo }}</h4>
+                </header>
+                <p class="content-3lines-ellipsis">{{ $descripcion }}</p>                
+                <a href="@if ($videoLink) {{$videoLink}} @endif" class="theme_button min_width_button color3" href="#">Ver Video</a>
             </div>
         </div>
     </div>

@@ -180,16 +180,19 @@ function getDocumentos(id) {
 }
 /*================ funcion para retornar la bandera de un pais =============== */
 function getPais(pais) {
-    let datos = [];
-    paises.forEach((element) => {
-        if (element.code == pais) {
-            datos.push({
-                url: element.flag_4x3,
-                nombre: element.name,
-            });
-        }
-    });
-    return datos;
+    return paises.filter(item => item.code == pais).map(element => ({
+        url: element.flag_4x3,
+        nombre: element.name,
+    }))
+    // paises.forEach((element) => {
+    //     if (element.code == pais) {
+    //         datos.push({
+    //             url: element.flag_4x3,
+    //             nombre: element.name,
+    //         });
+    //     }
+    // });
+    // return datos;
 }
 /*=============== funcion para retornar los ODS de un proyecto =============== */
 
@@ -235,21 +238,14 @@ function updateMarkers() {
     var group3Visible = document.getElementById("color-3").checked;
 
     // Muestra u oculta los grupos de marcadores según el estado de los checkboxes
-    if (group1Visible) {
-        markadores.addTo(map);
-    } else {
-        markadores.removeFrom(map);
-    }
-    if (group2Visible) {
-        markers_buenas_practicas.addTo(map);
-    } else {
-        markers_buenas_practicas.removeFrom(map);
-    }
-    if (group3Visible) {
-        markers_ideas_innovadoras.addTo(map);
-    } else {
-        markers_ideas_innovadoras.removeFrom(map);
-    }
+    
+    markadores.removeFrom(map);
+    markers_buenas_practicas.removeFrom(map);
+    markers_ideas_innovadoras.removeFrom(map);
+
+    group1Visible && markadores.addTo(map);
+    group2Visible && markers_buenas_practicas.addTo(map);
+    group3Visible && markers_ideas_innovadoras.addTo(map);
 }
 document.getElementById("color-1").addEventListener("change", updateMarkers);
 document.getElementById("color-2").addEventListener("change", updateMarkers);
@@ -342,58 +338,104 @@ function FormLike() {
 }
 
 /*============= optencion de los proyectos ===============*/
-function getProyectos(){
-
-    axios.get("/mapa/proyectos")
-    .then((response) => {
-        proyectos = response.data.listaIdeasProyecto
-        documentos = response.data.documentos
-        paises = response.data.paises
-        categorias = response.data.ods
-        ciudades = response.data.ciudades
-        sectores = response.data.sectores        
-       response.data.listaIdeasProyecto.forEach((element) => {
-        if(element.lat != null && element.lng != null){
-            let p = getPais(element.proyecto.pais);
-            let marker = L.marker([element.lat, element.lng], {
-                id: element.proyecto.id,
-                type: element.type,
-                img: getImg(element.proyecto.id),
-                pais: p[0].url,
-                pais_name: p[0].nombre,
-                ods: getODS(JSON.parse(element.proyecto.ods)),
-                sector: getSector(element.proyecto.sector),
-                content: element.proyecto.descripcion,
-                name: element.proyecto.titulo,
-                ciudad: getCiudad(element.ciudad),
-                presupuesto: element.proyecto.presupuesto,
-                popularidad: element.proyecto.popularidad,
-                entidad: element.proyecto.entidad,
-                poblacion: element.proyecto.poblacion,
-                imagenes: getImagenes(element.proyecto.id),
-                pdfs: getDocumentos(element.proyecto.id),
-            }).bindPopup(element.proyecto.titulo);
-        
-            if (element.type == "buena practica") {
-                marker.setIcon(proyectoMarker);
-                markers_buenas_practicas.addLayer(marker);
-            }
-        
-            if (element.type == "idea inovadora") {
-                marker.setIcon(ideaMarker);
-                markers_ideas_innovadoras.addLayer(marker);
-            }
-            markadores.addLayer(marker);
-             
-        }
-        });
-    })
-    .catch((error) => {
+async function getProyectos() {
+    const { data } = await axios.get("/mapa/proyectos").catch(error => {
         console.log(error);
-        /*$("#ciudad").append(`
-                <option value="" selected disabled>No se encontro ciudades relacionados</option>
-            `);*/
-    });
+    })
+    proyectos = data.listaIdeasProyecto
+    documentos = data.documentos
+    paises = data.paises
+    categorias = data.ods
+    ciudades = data.ciudades
+    sectores = data.sectores
+
+    const latlngFilter = data.listaIdeasProyecto.filter(element => element.lat != null && element.lng != null)
+    for (const element of latlngFilter) {
+        let p = getPais(element.proyecto.pais);        
+        let marker = L.marker([element.lat, element.lng], {
+            id: element.proyecto.id,
+            type: element.type,
+            img: getImg(element.proyecto.id),
+            pais: p[0].url,
+            pais_name: p[0].nombre,
+            ods: getODS(JSON.parse(element.proyecto.ods)),
+            sector: getSector(element.proyecto.sector),
+            content: element.proyecto.descripcion,
+            name: element.proyecto.titulo,
+            ciudad: getCiudad(element.ciudad),
+            presupuesto: element.proyecto.presupuesto,
+            popularidad: element.proyecto.popularidad,
+            entidad: element.proyecto.entidad,
+            poblacion: element.proyecto.poblacion,
+            imagenes: getImagenes(element.proyecto.id),
+            pdfs: getDocumentos(element.proyecto.id),
+        }).bindPopup(element.proyecto.titulo);
+
+        if (element.type == "buena practica") {
+            marker.setIcon(proyectoMarker);
+            markers_buenas_practicas.addLayer(marker);
+        }
+    
+        if (element.type == "idea inovadora") {
+            marker.setIcon(ideaMarker);
+            markers_ideas_innovadoras.addLayer(marker);
+        }
+        markadores.addLayer(marker);    
+        cargarMapa();  
+    }
+
+
+    // axios.get("/mapa/proyectos")
+    // .then((response) => {
+    //     proyectos = response.data.listaIdeasProyecto
+    //     documentos = response.data.documentos
+    //     paises = response.data.paises
+    //     categorias = response.data.ods
+    //     ciudades = response.data.ciudades
+    //     sectores = response.data.sectores  
+    //    response.data.listaIdeasProyecto.forEach((element) => {
+    //     if(element.lat != null && element.lng != null){
+    //         let p = getPais(element.proyecto.pais);
+    //         let marker = L.marker([element.lat, element.lng], {
+    //             id: element.proyecto.id,
+    //             type: element.type,
+    //             img: getImg(element.proyecto.id),
+    //             pais: p[0].url,
+    //             pais_name: p[0].nombre,
+    //             ods: getODS(JSON.parse(element.proyecto.ods)),
+    //             sector: getSector(element.proyecto.sector),
+    //             content: element.proyecto.descripcion,
+    //             name: element.proyecto.titulo,
+    //             ciudad: getCiudad(element.ciudad),
+    //             presupuesto: element.proyecto.presupuesto,
+    //             popularidad: element.proyecto.popularidad,
+    //             entidad: element.proyecto.entidad,
+    //             poblacion: element.proyecto.poblacion,
+    //             imagenes: getImagenes(element.proyecto.id),
+    //             pdfs: getDocumentos(element.proyecto.id),
+    //         }).bindPopup(element.proyecto.titulo);
+        
+    //         if (element.type == "buena practica") {
+    //             marker.setIcon(proyectoMarker);
+    //             markers_buenas_practicas.addLayer(marker);
+    //         }
+        
+    //         if (element.type == "idea inovadora") {
+    //             marker.setIcon(ideaMarker);
+    //             markers_ideas_innovadoras.addLayer(marker);
+    //         }
+    //         markadores.addLayer(marker);    
+    //         cargarMapa();                    
+    //     }         
+    //     });        
+        
+    // })
+    // .catch((error) => {
+    //     console.log(error);
+    //     /*$("#ciudad").append(`
+    //             <option value="" selected disabled>No se encontro ciudades relacionados</option>
+    //         `);*/
+    // });    
 }
 
 /*================== like marker ================ */
@@ -620,4 +662,3 @@ map.addLayer(markadores);
 map.addControl(searchControl);
 /*================================== */
 getProyectos();
-cargarMapa();

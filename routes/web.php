@@ -16,6 +16,7 @@ use App\Http\Controllers\MapaController;
 use Laravel\Socialite\Facades\Socialite;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::post('/like-video', [HomeController::class, 'likeVideo'])->name('likeVideo');
 
 Route::get('/video/{video}', [VideoController::class, 'index'])->name('video.ver');
 Route::get('/equipo', [AutorController::class, 'team'])->name('team');

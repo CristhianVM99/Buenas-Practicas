@@ -12,7 +12,7 @@
                     <div class="col-xs-12 col-md-8">
                         @include('components.video.video-left')
                     </div>
-                    <div class="col-xs-12 col-md-4"> 
+                    <div class="col-xs-12 col-md-4 overflow-y-scroll max-h-[200vh]"> 
                         @include('components.video.video-right')
                     </div>
                     <div class="col-sm-12 margin_0">

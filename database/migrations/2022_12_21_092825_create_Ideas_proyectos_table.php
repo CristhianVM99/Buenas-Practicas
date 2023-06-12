@@ -27,6 +27,9 @@ return new class extends Migration
             $table->decimal('presupuesto', 10, 2);
             $table->string("ods")->nullable();
             $table->boolean('aprobacion')->default(false);
+            $table->integer("popularidad")->default(0);
+            $table->double("latitud")->nullable();
+            $table->double("longitud")->nullable();
             $table->timestamps();
 
             $table->foreign('created_by')->references('id')->on('users');
