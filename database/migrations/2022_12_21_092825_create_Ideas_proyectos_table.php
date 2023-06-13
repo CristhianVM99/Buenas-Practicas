@@ -24,7 +24,7 @@ return new class extends Migration
             $table->text('descripcion')->nullable();
             $table->string("poblacion");
             $table->string("entidad")->nullable();
-            $table->decimal('presupuesto', 10, 2);
+            $table->unsignedBigInteger('presupuesto')->nullable();
             $table->string("ods")->nullable();
             $table->boolean('aprobacion')->default(false);
             $table->integer("popularidad")->default(0);

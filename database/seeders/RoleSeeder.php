@@ -25,6 +25,7 @@ class RoleSeeder extends Seeder
         DB::table('model_has_roles')->truncate();
 
         $administrador = Role::create( [ "name" => "admin" ]);
+        $autor         = Role::create( [ "name" => "autor" ]);
         $visitante     = Role::create( [ "name" => "visitante" ]);
         $innovador     = Role::create( [ "name" => "innovador" ]);
         $experto       = Role::create( [ "name" => "experto" ]);

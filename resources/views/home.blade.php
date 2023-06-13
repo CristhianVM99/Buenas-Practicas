@@ -7,3 +7,6 @@
     @include('components.main.biblioteca')
     @include('components.main.comunidad')
 @endsection
+@section('footer')
+    @include('components.footer')
+@endsection

@@ -38,7 +38,7 @@
             @include('components.menu')
             @include('sections.mensajes-toast')
             @yield('content')
-            @include('components.footer')
+            @yield('footer')
         </div>
     </div>
     <script src='{{ url('js/compressed.js') }}'></script>

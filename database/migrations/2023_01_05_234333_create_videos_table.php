@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('foto');
             $table->unsignedBigInteger('autor_id')->nullable();
             $table->unsignedBigInteger('entidad_id')->nullable();
+            $table->integer("popularidad")->default(0);
             $table->timestamps();
 
             $table->foreign('autor_id')->references('id')->on('autores');

@@ -28,6 +28,7 @@
                     <div class="widget widget_recent_posts">
                         <h4 class="widget-title">Videos Recientes</h4>
                         <ul>
+                            @if($sectores->first())
                             <li class="media">
                                 <div class="media-left media-middle"> <img src="https://previews.123rf.com/images/ksena32/ksena321710/ksena32171000413/87933208-fondo-de-confeti-de-peque%C3%B1as-estrellas-de-colores.jpg" alt=""> </div>
                                 <div class="media-body media-middle">
@@ -46,6 +47,7 @@
                                     <span class="small-text highlightlinks"></span> 
                                 </div>
                             </li>
+                            @endif
                         </ul>
                     </div>
                 </div>
